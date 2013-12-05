@@ -1,7 +1,7 @@
 package main;
 /**
  * Launch the game
- * 
+ * @author Steeves Obiang Ndam
  * @author Kraken
  *
  */
