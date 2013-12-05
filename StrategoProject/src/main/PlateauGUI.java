@@ -10,7 +10,7 @@ import java.awt.event.*;
  * Interface graphique du plateau, utilise classe Plateau pour définir le visuel
  * +comportement des différents éléments
  *     
- * @author Kraken
+ * @author Kraken ;)
  *
  */
 public class PlateauGUI extends JFrame
