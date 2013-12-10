@@ -271,7 +271,7 @@ public class PlateauGUI extends JFrame
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 			
 		}
 
@@ -289,13 +289,16 @@ public class PlateauGUI extends JFrame
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
+			caseButton pionNew= ((caseButton)e.getSource());
+			System.out.println(pionNew);
+			Unit pionCurrent=cb1[i][j].getPion();
+			//cb2 [i][j].setIcon(new ImageIcon(null));
 			
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 			
 		}
 	}
