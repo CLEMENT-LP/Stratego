@@ -26,9 +26,11 @@ public class PlateauGUI extends JFrame
 	private caseButton pionCurrent;
 	private ArrayList<Unit> listePionsWhite=new ArrayList<Unit>();
 	private ArrayList<Unit> listePionsBlack=new ArrayList<Unit>();
-	private boolean selection=false; //unité en sélection?
+	private boolean selection=true; //unité en sélection?
+	//private boolean select=true;
 	private boolean placerPions=false;
 	private boolean start=false;
+	
 	
 	public void createUnit(){
 	Unit bmarechal=new Unit("marshal",10,"images/black/marshal.jpg");
@@ -212,16 +214,22 @@ public class PlateauGUI extends JFrame
 				//cb [i][j].setBackground (Color.WHITE);
 				cb [i][j].setPreferredSize (new Dimension (50, 50));             // on cree les boutons et on les met tous blancs
 				jp.add (cb[i][j]);
-				cb[i][j].addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent evt) {
-						MoveActionPerformed(evt);
-					}
-				});
+				
 				cb[i][j].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent evt) {
 						DeposeActionPerformed(evt);
 					}
 				});
+			
+				if(selection){
+				
+				cb[i][j].addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						MoveActionPerformed(evt);
+					}
+				});
+				}
+				
 				
 			
 				
@@ -270,25 +278,30 @@ public class PlateauGUI extends JFrame
 	private void MoveActionPerformed(ActionEvent evt) {
 		//System.out.println("jButton1.actionPerformed, event="+evt);
 		//TODO add your code for jButton1.actionPerformed
-		pionCurrent= ((caseButton)evt.getSource());
-		//(caseButton)evt.;
-		//System.out.println(pionCurrent);
-		this.selection=true;
-		System.out.println("true attendu"+selection);
-		((caseButton)evt.getSource()).setBackground (Color.WHITE);
-		//((caseButton)evt.getSource()).setPion(null);
-
+		if(((caseButton)evt.getSource()).isVide()){
+			pionCurrent= ((caseButton)evt.getSource());
+			//(caseButton)evt.;
+			//System.out.println(pionCurrent);
+			
+			//System.out.println("true attendu"+selection);
+			((caseButton)evt.getSource()).setBackground (Color.WHITE);
+			//((caseButton)evt.getSource()).setPion(null);
+			
+		}
+		
 	}
 	private void DeposeActionPerformed(ActionEvent evt) {
-		//vérifie qu'une unité a été sélectionnée
-		if(this.selection){
-		((caseButton)evt.getSource()).setPion(pionCurrent.getPion());
-		((caseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
-		this.selection=false;
-		}
-		System.out.println("flase attendu"+selection);
-	
+		if(pionCurrent!=null){
+			((caseButton)evt.getSource()).setPion(pionCurrent.getPion());
+			((caseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
+			
+			}
+			//System.out.println("false attendu  "+selection);	
+		pionCurrent=null;
+			//selection=false;
 	}
+	
+	
 	
 	
 		private class caseButton extends JButton
@@ -330,8 +343,8 @@ public class PlateauGUI extends JFrame
 			 * @return true si la case contient pas de pion sinon retourne false
 			 */
 			public boolean isVide(){
-				if (this.getPion()==null) return true;
-				else return false;
+				if (this.getPion()==null) return false;
+				else return true;
 			}
 			public void videPion(){
 				this.pion=null;
