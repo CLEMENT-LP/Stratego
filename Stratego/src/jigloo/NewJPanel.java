@@ -3,6 +3,8 @@ package jigloo;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 
 import javax.swing.WindowConstants;
@@ -48,6 +50,11 @@ public class NewJPanel extends javax.swing.JPanel {
 				jButton1 = new JButton();
 				this.add(jButton1);
 				jButton1.setText("jButton1");
+				jButton1.addMouseListener(new MouseAdapter() {
+					public void mousePressed(MouseEvent evt) {
+						jButton1MousePressed(evt);
+					}
+				});
 				jButton1.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent evt) {
 						jButton1ActionPerformed(evt);
@@ -62,6 +69,11 @@ public class NewJPanel extends javax.swing.JPanel {
 	private void jButton1ActionPerformed(ActionEvent evt) {
 		System.out.println("jButton1.actionPerformed, event="+evt);
 		//TODO add your code for jButton1.actionPerformed
+	}
+	
+	private void jButton1MousePressed(MouseEvent evt) {
+		System.out.println("jButton1.mousePressed, event="+evt);
+		//TODO add your code for jButton1.mousePressed
 	}
 
 }
