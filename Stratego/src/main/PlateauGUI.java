@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Interface graphique du plateau, utilise classe Plateau pour définir le visuel
  * +comportement des différents éléments
  *     
- * @author Kraken ;)
+ * @author LP
  *
  */
 public class PlateauGUI extends JFrame
