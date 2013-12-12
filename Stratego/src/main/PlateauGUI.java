@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author Kraken ;)
  *
  */
-public class PlateauGUI extends JFrame
+public class PlateauGUI extends JFrame 
 {
 
 	private Plateau plateau;
@@ -168,10 +168,10 @@ public class PlateauGUI extends JFrame
 				
 				cb1[i][j].addMouseListener(new MouseAdapter() {
 					public void mouseReleased(MouseEvent evt) {
-						DeposeMouseReleased(evt);
+						buttonMouseReleased(evt);
 					}
 					public void mousePressed(MouseEvent evt) {
-						MoveMousePressed(evt);
+						buttonMousePressed(evt);
 					}
 				});
 				
@@ -207,10 +207,10 @@ public class PlateauGUI extends JFrame
 				});*/
 				cb2[i][j].addMouseListener(new MouseAdapter() {
 					public void mouseReleased(MouseEvent evt) {
-						DeposeMouseReleased(evt);
+						buttonMouseReleased(evt);
 					}
 					public void mousePressed(MouseEvent evt) {
-						MoveMousePressed(evt);
+						buttonMousePressed(evt);
 					}
 				});
 				
@@ -231,11 +231,11 @@ public class PlateauGUI extends JFrame
 				
 				
 				cb[i][j].addMouseListener(new MouseAdapter() {
-					public void mouseReleased(MouseEvent evt) {
-						DeposeMouseReleased(evt);
+					public void mouseClicked(MouseEvent evt) {
+						buttonMouseReleased(evt);
 					}
 					public void mousePressed(MouseEvent evt) {
-						MoveMousePressed(evt);
+						buttonMousePressed(evt);
 					}
 				});
 				/*
@@ -292,7 +292,7 @@ public class PlateauGUI extends JFrame
 		this.cb2 = cb2;
 	}
 
-	private void MoveMousePressed(MouseEvent evt) {
+	private void buttonMousePressed(MouseEvent evt) {
 		System.out.println("jButton1.mousePressed, event="+evt);
 		//TODO add your code for jButton1.mousePressed
 		if(((caseButton)evt.getSource()).isVide()){
@@ -306,7 +306,7 @@ public class PlateauGUI extends JFrame
 		}
 	}
 	
-	private void DeposeMouseReleased(MouseEvent evt) {
+	private void buttonMouseReleased(MouseEvent evt) {
 		System.out.println("jButton1.mouseReleased, event="+evt);
 		//TODO add your code for jButton1.mouseReleased
 		if(pionCurrent!=null){
@@ -404,6 +404,7 @@ public class PlateauGUI extends JFrame
 
 			
 		}
+
 }   
 
 
