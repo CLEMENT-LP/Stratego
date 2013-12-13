@@ -40,7 +40,7 @@ public class CaseButton extends JButton
 	 * Vérification contient Unit
 	 * @return true si la case contient pas de pion sinon retourne false
 	 */
-	public boolean isVide(){
+	public boolean isNotVide(){
 		if (this.getPion()==null) return false;
 		else return true;
 	}
