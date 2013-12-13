@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Interface graphique du plateau, utilise classe Plateau pour définir le visuel
  * +comportement des différents éléments
  *     
- * @author Kraken ;)
+ * @author lp
  *
  */
 public class PlateauGUI extends JFrame 
@@ -20,10 +20,10 @@ public class PlateauGUI extends JFrame
 	private Plateau plateau;
 	//!\\ ajouter tableaux rouge et bleu de départ
 	private JLabel result;
-	private caseButton [][] cb;
-	private caseButton [][] cb1;
-	private caseButton [][] cb2;
-	private caseButton pionCurrent;
+	private CaseButton [][] cb;
+	private CaseButton [][] cb1;
+	private CaseButton [][] cb2;
+	private CaseButton pionCurrent;
 	private ArrayList<Unit> listePionsWhite=new ArrayList<Unit>();
 	private ArrayList<Unit> listePionsBlack=new ArrayList<Unit>();
 	private boolean selection=true; //unité en sélection?
@@ -153,14 +153,14 @@ public class PlateauGUI extends JFrame
 		JButton launch = new JButton("START");
 		//launch.addActionListener (new LaunchButtonListener()); // bouton "Launch" avec écouteur d'action
 		//CONTENU des boutons des Grid (exemple basique à remplacer par les objets UNIT)
-		cb1 = new caseButton [5][8]; 
+		cb1 = new CaseButton [5][8]; 
 		int compteur=0;
 		for(int i=0; i < 5; i++)
 		{
 			for(int j=0; j < 8; j++)
 			{	
 				Unit pion=listePionsWhite.get(compteur);
-				cb1 [i][j] = new caseButton(i,j,pion);
+				cb1 [i][j] = new CaseButton(i,j,pion);
 				cb1 [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(pion.getImagePath())));
 				cb1 [i][j].setBackground (Color.RED);
 				cb1 [i][j].setPreferredSize (new Dimension (50, 50));             // on cree les boutons et on les met tous blancs
@@ -187,13 +187,13 @@ public class PlateauGUI extends JFrame
 			}
 		}
 		compteur=0;
-		cb2 = new caseButton [5][8]; 
+		cb2 = new CaseButton [5][8]; 
 		for(int i=0; i < 5; i++)
 		{
 			for(int j=0; j < 8; j++)
 			{
 				Unit pion=listePionsBlack.get(compteur);
-				cb2 [i][j] = new caseButton(i,j,pion);
+				cb2 [i][j] = new CaseButton(i,j,pion);
 				cb2 [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(pion.getImagePath())));
 				cb2 [i][j].setBackground (Color.BLUE);
 				cb2 [i][j].setPreferredSize (new Dimension (50, 50));             // on cree les boutons et on les met tous blancs
@@ -217,12 +217,12 @@ public class PlateauGUI extends JFrame
 				compteur++;
 			}
 		}
-		cb = new caseButton [size][size]; 
+		cb = new CaseButton [size][size]; 
 		for(int i=0; i < size; i++)
 		{
 			for(int j=0; j < size; j++)
 			{
-				cb [i][j] = new caseButton(i,j,null);
+				cb [i][j] = new CaseButton(i,j,null);
 				cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource("images/background/01 ("+(j+i*10+1)+").gif")));//AJOUT TEMP
 				cb [i][j].setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));//AJOUT TEMP
 				//cb [i][j].setBackground (Color.WHITE);
@@ -273,36 +273,36 @@ public class PlateauGUI extends JFrame
 		this.setLocationRelativeTo(null);//centrer la fenêtre
 	}
 	
-	public caseButton[][] getCb() {
+	public CaseButton[][] getCb() {
 		return cb;
 	}
-	public void setCb(caseButton[][] cb) {
+	public void setCb(CaseButton[][] cb) {
 		this.cb = cb;
 	}
-	public caseButton[][] getCb1() {
+	public CaseButton[][] getCb1() {
 		return cb1;
 	}
-	public void setCb1(caseButton[][] cb1) {
+	public void setCb1(CaseButton[][] cb1) {
 		this.cb1 = cb1;
 	}
-	public caseButton[][] getCb2() {
+	public CaseButton[][] getCb2() {
 		return cb2;
 	}
-	public void setCb2(caseButton[][] cb2) {
+	public void setCb2(CaseButton[][] cb2) {
 		this.cb2 = cb2;
 	}
 
 	private void buttonMousePressed(MouseEvent evt) {
 		System.out.println("jButton1.mousePressed, event="+evt);
 		//TODO add your code for jButton1.mousePressed
-		if(((caseButton)evt.getSource()).isVide()){
-			pionCurrent= ((caseButton)evt.getSource());
+		if(((CaseButton)evt.getSource()).isVide()){
+			pionCurrent= ((CaseButton)evt.getSource());
 			
-			//(caseButton)evt.;
+			//(CaseButton)evt.;
 			System.out.println(pionCurrent);
 			
 			//System.out.println("true attendu"+selection);
-			((caseButton)evt.getSource()).setBackground(Color.GREEN);
+			((CaseButton)evt.getSource()).setBackground(Color.GREEN);
 		}
 	}
 	
@@ -310,8 +310,8 @@ public class PlateauGUI extends JFrame
 		System.out.println("jButton1.mouseReleased, event="+evt);
 		//TODO add your code for jButton1.mouseReleased
 		if(pionCurrent!=null){
-			((caseButton)evt.getSource()).setPion(pionCurrent.getPion());
-			((caseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
+			((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
+			((CaseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
 			System.out.println(pionCurrent);
 			pionCurrent=null;
 			}
@@ -322,24 +322,24 @@ public class PlateauGUI extends JFrame
 	private void MoveActionPerformed(ActionEvent evt) {
 		//System.out.println("jButton1.actionPerformed, event="+evt);
 		//TODO add your code for jButton1.actionPerformed
-		if(((caseButton)evt.getSource()).isVide()){
-			pionCurrent= ((caseButton)evt.getSource());
+		if(((CaseButton)evt.getSource()).isVide()){
+			pionCurrent= ((CaseButton)evt.getSource());
 			this.pionCurrent=pionCurrent;
-			//(caseButton)evt.;
+			//(CaseButton)evt.;
 			System.out.println(pionCurrent);
 			
 			//System.out.println("true attendu"+selection);
-			((caseButton)evt.getSource()).setBackground (Color.GREEN);
-			//((caseButton)evt.getSource()).setPion(null);
+			((CaseButton)evt.getSource()).setBackground (Color.GREEN);
+			//((CaseButton)evt.getSource()).setPion(null);
 			
-			((caseButton)evt.getSource()).setEnabled(false);
+			((CaseButton)evt.getSource()).setEnabled(false);
 		}
 		
 	}
 	private void DeposeActionPerformed(ActionEvent evt) {
 		if(pionCurrent!=null){
-			((caseButton)evt.getSource()).setPion(pionCurrent.getPion());
-			((caseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
+			((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
+			((CaseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
 			System.out.println(pionCurrent);
 			pionCurrent=null;
 			}
@@ -351,59 +351,7 @@ public class PlateauGUI extends JFrame
 	
 	
 	
-		private class caseButton extends JButton
-		{
-			private int i; //ligne du bouton
-			private int j; //colonne du bouton
-			private Unit pion;
-			
-			public caseButton (int i,int j, Unit pion) 
-			{
-				super();
-				this.i=i;
-				this.j=j;
-				this.pion=pion;
-			}
-
-			public int getI()
-			{
-				return i;
-			}
-
-			public int getJ()
-			{
-				return j;
-			}
-			public Unit getPion()
-			{
-				return pion;
-			}
-			public void setPion(Unit pion) {
-				this.pion = pion;
-			}
-			public String toString(){
-				return pion.getDescription();
-				
-			}
-			/**
-			 * Vérification contient Unit
-			 * @return true si la case contient pas de pion sinon retourne false
-			 */
-			public boolean isVide(){
-				if (this.getPion()==null) return false;
-				else return true;
-			}
-			public void videPion(){
-				this.pion=null;
-			}
-			public void placePion(Unit pion){
-				setPion(pion);
-			}
-
-			
-
-			
-		}
+		
 
 }   
 
