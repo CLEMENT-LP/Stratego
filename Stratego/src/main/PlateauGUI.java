@@ -20,8 +20,6 @@ import java.util.ArrayList;
 public class PlateauGUI extends JFrame 
 {
 	private final int size = 10;
-	//private Plateau plateau;
-	//!\\ ajouter tableaux rouge et bleu de départ
 	private JLabel result;
 	private CaseButton [][] cb;
 	private CaseButton [][] cb1;
@@ -163,13 +161,13 @@ public class PlateauGUI extends JFrame
 		}
 		//CLIC GAUCHE
 		else if(((CaseButton)evt.getSource()).isNotVide()){
-			pionCurrent=((CaseButton)evt.getSource());
-			System.out.println(pionCurrent);
+			pionCurrent=((CaseButton)evt.getSource());//prend le pion sélectionné en mémoire
+			//System.out.println(pionCurrent);
 			//((CaseButton)evt.getSource()).setBackground (Color.GREEN);
 			l=((CaseButton)evt.getSource()).getI();
 			c=((CaseButton)evt.getSource()).getJ();
 			//((CaseButton)evt.getSource()).setEnabled(false);
-			background=((CaseButton)evt.getSource()).getBackground();
+			background=((CaseButton)evt.getSource()).getBackground();//regarde d'où provient la pièce
 		}
 		else if(((CaseButton)evt.getSource()).isNotVide()==false){System.out.println("Pas de pion à sélectionner ici");}
 	}
