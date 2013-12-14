@@ -1,4 +1,7 @@
 package main;
+
+//import test.Plateau;
+
 /**
  * Launch the game
  * @author Steeves Obiang Ndam
@@ -8,8 +11,7 @@ package main;
 public class Launcher {
 
 	public static void main(String[] args) {
-		Plateau plateau=new Plateau();
-		PlateauGUI plateauGUI=new PlateauGUI(plateau);
+		PlateauGUI plateauGUI=new PlateauGUI();
 
 	}
 

@@ -4,6 +4,8 @@ package main;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -16,8 +18,8 @@ import java.util.ArrayList;
  */
 public class PlateauGUI extends JFrame 
 {
-
-	private Plateau plateau;
+	private final int size = 10;
+	//private Plateau plateau;
 	//!\\ ajouter tableaux rouge et bleu de départ
 	private JLabel result;
 	private CaseButton [][] cb;
@@ -147,13 +149,13 @@ public class PlateauGUI extends JFrame
 		g.drawImage(monImage, 0, 0,this);
 
 	}
-	public PlateauGUI (Plateau plateau)
+	public PlateauGUI ()
 	{
 		createUnit();//Liste des pions
 		this.setTitle("Stratego");//titre fenêtre
 		//this.setLocation(200,200);//positionnement lors du lancement depuis bord supérieur gauche
-		this.plateau = plateau;//voir classe Plateau
-		int size=plateau.size();
+		//this.plateau = plateau;//voir classe Plateau
+		//int size=plateau.size();
 		Box hbAll=Box.createHorizontalBox();//SCHEMA A FOURNIR (modulable pour ajout ultérieurs)
 		Box vbPlateau=Box.createVerticalBox();
 		Box vb1 = Box.createVerticalBox(); // boite pour les boutons
