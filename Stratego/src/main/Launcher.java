@@ -12,7 +12,5 @@ public class Launcher {
 
 	public static void main(String[] args) {
 		PlateauGUI plateauGUI=new PlateauGUI();
-
 	}
-
 }

@@ -6,6 +6,7 @@ import javax.swing.border.LineBorder;
 
 
 
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class PlateauGUI extends JFrame
 	private CaseButton pionCurrent;
 	private ArrayList<Unit> listePionsWhite=new ArrayList<Unit>();
 	private ArrayList<Unit> listePionsBlack=new ArrayList<Unit>();
+	private Unit[][] listePionsBackground=new Unit[10][10];
 	private boolean selection=true; //unité en sélection?
 	//private boolean select=true;
 	private boolean placerPions=false;
@@ -35,123 +37,14 @@ public class PlateauGUI extends JFrame
 	private int l;
 	private int c;
 	private Color background;
-
-	public void createUnit(){
-		Unit bmarechal=new Unit("marshal",10,"images/black/marshal.jpg");
-		Unit bgeneral=new Unit("general",9,"images/black/general.jpg");
-		Unit bcolonel=new Unit("Colonel",8,"images/black/colonel.jpg");
-		Unit bmajor=new Unit("major",7,"images/black/major.jpg");
-		Unit bcapitaine=new Unit("captain",6,"images/black/captain.jpg");
-		Unit blieutenant=new Unit("lieutnant",5,"images/black/leutnant.jpg");
-		Unit bsergent=new Unit("sergent",4,"images/black/sergent.jpg");
-		Unit beclaireur=new Unit("scout",2,"images/black/scout.jpg");
-		Unit bdemineur=new Unit("deminor",3,"images/black/deminor.jpg");
-		Unit bespion=new Unit("spy",1,"images/black/spy.jpg");
-		Unit bbombe=new Unit("bomb",11,"images/black/bomb.jpg");
-		Unit bdrapeau=new Unit("flag",0,"images/black/flag.jpg");
-
-		Unit wmarechal=new Unit("marshal",10,"images/white/marshal.jpg");
-		Unit wgeneral=new Unit("general",9,"images/white/general.jpg");
-		Unit wcolonel=new Unit("Colonel",8,"images/white/colonel.jpg");
-		Unit wmajor=new Unit("major",7,"images/white/major.jpg");
-		Unit wcapitaine=new Unit("captain",6,"images/white/captain.jpg");
-		Unit wlieutenant=new Unit("lieutnant",5,"images/white/leutnant.jpg");
-		Unit wsergent=new Unit("sergent",4,"images/white/sergent.jpg");
-		Unit weclaireur=new Unit("scout",2,"images/white/scout.jpg");
-		Unit wdemineur=new Unit("deminor",3,"images/white/deminor.jpg");
-		Unit wespion=new Unit("spy",1,"images/white/spy.jpg");
-		Unit wbombe=new Unit("bomb",11,"images/white/bomb.jpg");
-		Unit wdrapeau=new Unit("flag",0,"images/white/flag.jpg");
-
-		listePionsBlack.add(bmarechal);
-		listePionsBlack.add(bgeneral);
-
-		for(int i=0;i<2;i++)
-		{
-			listePionsBlack.add(bcolonel);
-		}
-		for(int i=0;i<3;i++)
-		{
-			listePionsBlack.add(bmajor);
-		}
-		for(int i=0;i<4;i++)
-		{
-			listePionsBlack.add(bcapitaine);
-		}
-		for(int i=0;i<4;i++)
-		{
-			listePionsBlack.add(blieutenant);
-		}
-		for(int i=0;i<4;i++)
-		{
-			listePionsBlack.add(bsergent);
-		}
-		for(int i=0;i<5;i++)
-		{
-			listePionsBlack.add(bdemineur);
-		}
-		for(int i=0;i<8;i++)
-		{
-			listePionsBlack.add(beclaireur);
-		}
-		for(int i=0;i<6;i++)
-		{
-			listePionsBlack.add(bbombe);
-		}
-		listePionsBlack.add(bespion);
-		listePionsBlack.add(bdrapeau);
-
-		listePionsWhite.add(wmarechal);
-		listePionsWhite.add(wgeneral);
-
-		for(int i=0;i<2;i++)
-		{
-			listePionsWhite.add(wcolonel);
-		}
-		for(int i=0;i<3;i++)
-		{
-			listePionsWhite.add(wmajor);
-		}
-		for(int i=0;i<4;i++)
-		{
-			listePionsWhite.add(wcapitaine);
-		}
-		for(int i=0;i<4;i++)
-		{
-			listePionsWhite.add(wlieutenant);
-		}
-		for(int i=0;i<4;i++)
-		{
-			listePionsWhite.add(wsergent);
-		}
-		for(int i=0;i<5;i++)
-		{
-			listePionsWhite.add(wdemineur);
-		}
-		for(int i=0;i<8;i++)
-		{
-			listePionsWhite.add(weclaireur);
-		}
-		for(int i=0;i<6;i++)
-		{
-			listePionsWhite.add(wbombe);
-		}
-		listePionsWhite.add(wespion);
-		listePionsWhite.add(wdrapeau);
-	}
-
-	private void paintComponent(Graphics g) 
-	{
-		super.paintComponents(g);
-
-		ImageIcon m = new ImageIcon("images/background.jpg");
-		Image monImage = m.getImage();
-		g.drawImage(monImage, 0, 0,this);
-
-	}
+	
 	public PlateauGUI ()
 	{
-		createUnit();//Liste des pions
+		BDDPions bddPions=new BDDPions();//création BDD Pions
+		listePionsBackground=bddPions.getListePionsBackground();
+		listePionsBlack=bddPions.getListePionsBlack();
+		listePionsWhite=bddPions.getListePionsWhite();
+		
 		this.setTitle("Stratego");//titre fenêtre
 		//this.setLocation(200,200);//positionnement lors du lancement depuis bord supérieur gauche
 		//this.plateau = plateau;//voir classe Plateau
@@ -161,20 +54,7 @@ public class PlateauGUI extends JFrame
 		Box vb1 = Box.createVerticalBox(); // boite pour les boutons
 
 		//LE background fonctionne PAS!
-		JPanel jp = new JPanel (new GridLayout(size, size)) // panneau pour le dessin de la matrice
-		{
-			protected void paintComponent(Graphics g) 
-			{
-				super.paintComponent(g);
-
-				ImageIcon m = new ImageIcon("images/background.JPG");
-				Image monImage = m.getImage();
-				g.drawImage(monImage, 0, 0,this);
-
-			}
-		};
-
-
+		JPanel jp = new JPanel (new GridLayout(size, size)); // panneau pour le dessin de la matrice 
 		JPanel jpP1 = new JPanel (new GridLayout(5, 8)); //pions P1
 		JPanel jpP2 = new JPanel (new GridLayout(5, 8));//pions P2
 
@@ -183,6 +63,7 @@ public class PlateauGUI extends JFrame
 		//CONTENU des boutons des Grid (exemple basique à remplacer par les objets UNIT)
 		cb1 = new CaseButton [5][8]; 
 		int compteur=0;
+		
 		for(int i=0; i < 5; i++)
 		{
 			for(int j=0; j < 8; j++)
@@ -191,7 +72,7 @@ public class PlateauGUI extends JFrame
 				cb1 [i][j] = new CaseButton(i,j,pion);
 				cb1 [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(pion.getImagePath())));
 				cb1 [i][j].setBackground (Color.RED);
-				cb1 [i][j].setPreferredSize (new Dimension (50, 50));             // on cree les boutons et on les met tous blancs
+				cb1 [i][j].setPreferredSize (new Dimension (50, 50));             
 				jpP1.add (cb1[i][j]);
 
 				cb1[i][j].addMouseListener(new MouseAdapter() {
@@ -213,7 +94,7 @@ public class PlateauGUI extends JFrame
 				cb2 [i][j] = new CaseButton(i,j,pion);
 				cb2 [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(pion.getImagePath())));
 				cb2 [i][j].setBackground (Color.BLUE);
-				cb2 [i][j].setPreferredSize (new Dimension (50, 50));             // on cree les boutons et on les met tous blancs
+				cb2 [i][j].setPreferredSize (new Dimension (50, 50));            
 				jpP2.add (cb2[i][j]);
 
 				cb2[i][j].addMouseListener(new MouseAdapter() {
@@ -231,8 +112,9 @@ public class PlateauGUI extends JFrame
 		{
 			for(int j=0; j < size; j++)
 			{
+				Unit pion=listePionsBackground[i][j];
 				cb [i][j] = new CaseButton(i,j,null);
-				//cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource("images/background/01 ("+(j+i*10+1)+").gif")));//AJOUT TEMP
+				cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(pion.getImagePath())));//AJOUT TEMP
 				cb [i][j].setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));//AJOUT TEMP
 				cb [i][j].setBackground (Color.GREEN);
 				cb [i][j].setPreferredSize (new Dimension (50, 50));             // on cree les boutons et on les met tous blancs
@@ -301,7 +183,7 @@ public class PlateauGUI extends JFrame
 
 			if(background==Color.RED)cb1 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
 			else if(background==Color.BLUE)cb2 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
-			else cb [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
+			else cb [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource(listePionsBackground[l][c].getImagePath())));
 		}//}
 		//CLIC GAUCHE
 		else if(((CaseButton)evt.getSource()).isNotVide()){
