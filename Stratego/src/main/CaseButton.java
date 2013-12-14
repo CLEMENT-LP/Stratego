@@ -6,9 +6,9 @@ public class CaseButton extends JButton
 {
 	private int i; //ligne du bouton
 	private int j; //colonne du bouton
-	private Unit pion;
+	private Pion pion;
 	
-	public CaseButton (int i,int j, Unit pion) 
+	public CaseButton (int i,int j, Pion pion) 
 	{
 		super();
 		this.i=i;
@@ -25,11 +25,11 @@ public class CaseButton extends JButton
 	{
 		return j;
 	}
-	public Unit getPion()
+	public Pion getPion()
 	{
 		return pion;
 	}
-	public void setPion(Unit pion) {
+	public void setPion(Pion pion) {
 		this.pion = pion;
 	}
 	public String toString(){
@@ -37,7 +37,7 @@ public class CaseButton extends JButton
 		
 	}
 	/**
-	 * Vérification contient Unit
+	 * Vérification contient Pion
 	 * @return true si la case contient pas de pion sinon retourne false
 	 */
 	public boolean isNotVide(){
@@ -47,7 +47,7 @@ public class CaseButton extends JButton
 	public void videPion(){
 		this.pion=null;
 	}
-	public void placePion(Unit pion){
+	public void placePion(Pion pion){
 		setPion(pion);
 	}
 

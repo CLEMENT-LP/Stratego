@@ -4,11 +4,11 @@ package main;
  * @author Kraken
  *
  */
-public class Unit {
+public class Pion {
 	private String description;
 	private int value;
 	private String imagePath;
-	public Unit(String description, int value, String imagePath) {
+	public Pion(String description, int value, String imagePath) {
 		super();
 		this.description = description;
 		this.value = value;
