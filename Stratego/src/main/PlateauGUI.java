@@ -137,16 +137,16 @@ public class PlateauGUI extends JFrame
 		listePionsWhite.add(wespion);
 		listePionsWhite.add(wdrapeau);
 	}
-	
+
 	private void paintComponent(Graphics g) 
-    {
-        super.paintComponents(g);
+	{
+		super.paintComponents(g);
 
-        ImageIcon m = new ImageIcon("images/background.jpg");
-        Image monImage = m.getImage();
-        g.drawImage(monImage, 0, 0,this);
+		ImageIcon m = new ImageIcon("images/background.jpg");
+		Image monImage = m.getImage();
+		g.drawImage(monImage, 0, 0,this);
 
-    }
+	}
 	public PlateauGUI (Plateau plateau)
 	{
 		createUnit();//Liste des pions
@@ -162,17 +162,17 @@ public class PlateauGUI extends JFrame
 		JPanel jp = new JPanel (new GridLayout(size, size)) // panneau pour le dessin de la matrice
 		{
 			protected void paintComponent(Graphics g) 
-            {
-                super.paintComponent(g);
- 
-                ImageIcon m = new ImageIcon("images/background.JPG");
-                Image monImage = m.getImage();
-                g.drawImage(monImage, 0, 0,this);
- 
-            }
+			{
+				super.paintComponent(g);
+
+				ImageIcon m = new ImageIcon("images/background.JPG");
+				Image monImage = m.getImage();
+				g.drawImage(monImage, 0, 0,this);
+
+			}
 		};
-	
-		
+
+
 		JPanel jpP1 = new JPanel (new GridLayout(5, 8)); //pions P1
 		JPanel jpP2 = new JPanel (new GridLayout(5, 8));//pions P2
 
@@ -194,30 +194,11 @@ public class PlateauGUI extends JFrame
 
 				cb1[i][j].addMouseListener(new MouseAdapter() {
 					public void mousePressed(MouseEvent evt) {
-						
+
 						buttonMousePressed(evt);
 					}
 				});
-
-				/*
-				cb1[i][j].addMouseListener(new MouseAdapter() {
-					public void mouseReleased(MouseEvent evt) {
-						buttonMouseReleased(evt);
-					}
-					public void mousePressed(MouseEvent evt) {
-						buttonMousePressed(evt);
-					}
-				});
-
-				//cb1 [i][j].addActionListener (new ColorButtonListener());
-
-				cb1[i][j].addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent evt) {
-						MoveActionPerformed(evt);
-					}
-				});*/
 				compteur++;
-				//Unit temp=cb1[i][j].getPion();
 			}
 		}
 		compteur=0;
@@ -235,24 +216,10 @@ public class PlateauGUI extends JFrame
 
 				cb2[i][j].addMouseListener(new MouseAdapter() {
 					public void mousePressed(MouseEvent evt) {
-						
+
 						buttonMousePressed(evt);
 					}
 				});
-				/*
-				cb2[i][j].addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent evt) {
-						MoveActionPerformed(evt);
-					}
-				});/*
-				cb2[i][j].addMouseListener(new MouseAdapter() {
-					public void mouseReleased(MouseEvent evt) {
-						buttonMouseReleased(evt);
-					}
-					public void mousePressed(MouseEvent evt) {
-						buttonMousePressed(evt);
-					}
-				});*/
 
 				compteur++;
 			}
@@ -265,38 +232,16 @@ public class PlateauGUI extends JFrame
 				cb [i][j] = new CaseButton(i,j,null);
 				//cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource("images/background/01 ("+(j+i*10+1)+").gif")));//AJOUT TEMP
 				cb [i][j].setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));//AJOUT TEMP
-				//cb [i][j].setBackground (Color.WHITE);
+				cb [i][j].setBackground (Color.GREEN);
 				cb [i][j].setPreferredSize (new Dimension (50, 50));             // on cree les boutons et on les met tous blancs
 				jp.add (cb[i][j]);
 
-				/*
 				cb[i][j].addMouseListener(new MouseAdapter() {
-					public void mouseClicked(MouseEvent evt) {
-						buttonMouseReleased(evt);
-					}
 					public void mousePressed(MouseEvent evt) {
+
 						buttonMousePressed(evt);
 					}
 				});
-
-				cb[i][j].addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent evt) {
-						DeposeActionPerformed(evt);
-					}
-				});*/
-				cb[i][j].addMouseListener(new MouseAdapter() {
-					public void mousePressed(MouseEvent evt) {
-						
-						buttonMousePressed(evt);
-					}
-				});
-				/*
-				cb[i][j].addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent evt) {
-						MoveActionPerformed(evt);
-					}
-				});*/
-
 			}
 		}
 
@@ -339,97 +284,41 @@ public class PlateauGUI extends JFrame
 	}
 
 	private void buttonMousePressed(MouseEvent evt) {
-		
 
-		
+
+
 		//CLIC DROIT
 		if(evt.getButton()==MouseEvent.BUTTON3 && pionCurrent.getPion()==null)System.out.println("Sélectionnez d'abord un pion à déplacer");
 		else if(evt.getButton()==MouseEvent.BUTTON3 && pionCurrent.getPion()!=null){
 			System.out.println("clic-droit");
-			//if(pionCurrent!=null){
-			//System.out.println("jButton1.mousePressed, event="+evt);
 			((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
 			((CaseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
 			System.out.println(pionCurrent);
 			pionCurrent.setPion(null);
-			
-			
+
+
 			if(background==Color.RED)cb1 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
 			else if(background==Color.BLUE)cb2 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
 			else cb [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
 		}//}
 		//CLIC GAUCHE
 		else if(((CaseButton)evt.getSource()).isNotVide()){
-					pionCurrent=((CaseButton)evt.getSource());
-
-
-					System.out.println(pionCurrent);
-
-
-					//((CaseButton)evt.getSource()).setBackground (Color.GREEN);
-					l=((CaseButton)evt.getSource()).getI();
-					c=((CaseButton)evt.getSource()).getJ();
-					//((CaseButton)evt.getSource()).setEnabled(false);
-					background=((CaseButton)evt.getSource()).getBackground();
-
-
-				}
-				else if(((CaseButton)evt.getSource()).isNotVide()==false){System.out.println("Pas de pion à sélectionner ici");}
-
-
-
-	}
-
-	/*
-	private void buttonMouseReleased(MouseEvent evt) {
-		System.out.println("jButton1.mouseReleased, event="+evt);
-		//TODO add your code for jButton1.mouseReleased
-		if(pionCurrent!=null){
-			((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
-			((CaseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
-			System.out.println(pionCurrent);
-			pionCurrent=null;
-			}
-	}
-
-	 *//*
-
-	private void MoveActionPerformed(ActionEvent evt) {
-		//System.out.println("jButton1.actionPerformed, event="+evt);
-
-		if(((CaseButton)evt.getSource()).isNotVide()){
-			pionCurrent= ((CaseButton)evt.getSource());
+			pionCurrent=((CaseButton)evt.getSource());
 
 
 			System.out.println(pionCurrent);
 
 
-			((CaseButton)evt.getSource()).setBackground (Color.GREEN);
-			//((CaseButton)evt.getSource()).setPion(null);
+			//((CaseButton)evt.getSource()).setBackground (Color.GREEN);
+			l=((CaseButton)evt.getSource()).getI();
+			c=((CaseButton)evt.getSource()).getJ();
+			//((CaseButton)evt.getSource()).setEnabled(false);
+			background=((CaseButton)evt.getSource()).getBackground();
 
-			((CaseButton)evt.getSource()).setEnabled(false);
 
 		}
-
+		else if(((CaseButton)evt.getSource()).isNotVide()==false){System.out.println("Pas de pion à sélectionner ici");}
 	}
-	/*
-	private void DeposeActionPerformed(ActionEvent evt) {
-		if(pionCurrent!=null){
-			((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
-			((CaseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
-			System.out.println(pionCurrent);
-			pionCurrent=null;
-			}
-			//System.out.println("false attendu  "+selection);	
-
-
-	}
-
-	  */
-
-
-
-
 }   
 
 
