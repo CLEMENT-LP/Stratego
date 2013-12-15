@@ -36,12 +36,13 @@ public class PlateauGUI extends JFrame
 	private int l;
 	private int c;
 	private Color background;
-	private Pion neutre=new Pion("neutre",-1,"");
+	private Pion neutre=new Pion("neutre",-1,"",0);
 	private Joueur joueur1;
 	private Joueur joueur2;
 	private Joueur joueurCurrent;
-	private int endPlace=0;//1e phase
-
+	private int endPlace=-1;//1e phase
+	
+	
 	public PlateauGUI ()
 	{
 		joueur1=new Joueur("joueur1");
@@ -133,6 +134,7 @@ public class PlateauGUI extends JFrame
 				});
 
 				compteur++;
+				
 			}
 		}
 		cb = new CaseButton [size][size]; 
@@ -154,13 +156,14 @@ public class PlateauGUI extends JFrame
 						buttonMousePressed(evt);
 					}
 				});
-
+				
 			}
+			
 		}
 		desactivation(cb);
-
+		
 		/*
-		 * PHASES de JEU
+		 * PHASES de JEU boutons
 		 */
 		launch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -213,7 +216,42 @@ public class PlateauGUI extends JFrame
 	}
 
 	
+		/**
+		 * faire disparaitre boutons
+		 */
+		public void NotVisible(CaseButton[][] cb){
+			for(int i=0;i<cb.length;i++){
+				for(int j=0;j<cb[i].length;j++){
+					cb[i][j].setVisible(false);
+				}
+			}
+		}
+		/**
+		 * faire réapparaitre boutons
+		 */
+		public void Visible(CaseButton[][] cb){
+			for(int i=0;i<cb.length;i++){
+				for(int j=0;j<cb[i].length;j++){
+					cb[i][j].setVisible(true);
+				}
+			}
+		}
+		
+		public void NotVisible(CaseButton[][] cb, int l0, int c0, int l, int c){
+			for(int i=c0;i<c+1;i++){
+				for(int j=l0;j<l+1;j++){
+					cb[i][j].setVisible(false);
+				}
+			}
+		}
+			public void Visible(CaseButton[][] cb, int l0, int c0, int l, int c){
+				for(int i=c0;i<c+1;i++){
+					for(int j=l0;j<l+1;j++){
+						cb[i][j].setVisible(true);
+					}
+				}
 
+		}
 		/**
 		 * Indique interdit dans la description des pions contenus sur les cases interdites au placement
 		 * @param cb
@@ -263,41 +301,58 @@ public class PlateauGUI extends JFrame
 			}
 			return count;
 		}
+		//créer un tableau qui retient les icones puis faire la substitution
+		public void remplacerImagesPion(CaseButton[][] cbTab){
+			int count=0;
+			for(int i=0;i<cb.length;i++){
+				for(int j=0;j<cb[i].length;j++){
+					if(cb[i][j].getPion().getValue()>-1) count++;
+				}
+			}
+			
+		}
 		
+		//Phase 1 : Placer les pions sur le plateau de jeu
+		private void placerActionPerformed(ActionEvent evt) {	
+			if(endPlace==-1){//éviter de relancer si le processus a déjà été mis en marche
+				activation(cb);
+				NotVisible(cb,0,0,9,5);
+				NotVisible(cbTab1);
+				endPlace++;
+			}
+		}
+		//Phase 1': le joueur dit qu'il a posé ses pions
+		private void tourPlaceActionPerformed(ActionEvent evt) {
+			System.out.println(countPionOnTab(cb));
+			
+			if(countPionOnTab(cb)==40 || endPlace==1 ){
+				
+				System.out.println("tout les pions sont posés");
+				
+				Visible(cbTab1);
+				Visible(cb);
+				NotVisible(cb,0,4,9,9);//inverser activation
+				System.out.println(endPlace);
+				//if(endPlace==1){
+					//((CaseButton)evt.getSource()).setVisible(false);
+				//}
+				endPlace++;
+			}
+			else System.out.println("tout les pions NE sont PAS posés");
+			
+		}
+		//Phase 2: lancement du jeu 1vs1
 		private void launchActionPerformed(ActionEvent evt) {
 			desactivation(cb, 2, 4, 3, 5);
 			desactivation(cb, 6, 4, 7, 5);
 		}
-
-		private void placerActionPerformed(ActionEvent evt) {	
-				activation(cb);
-				desactivation(cb,0,0,9,5);
-				desactivation(cbTab1);
-		}
-		
-		private void tourPlaceActionPerformed(ActionEvent evt) {
-			System.out.println(countPionOnTab(cb));
-			if(countPionOnTab(cb)==40){
-				System.out.println("tout les pions sont posés");
-				activation(cb);
-				activation(cbTab1);
-				desactivation(cbTab2);
-				desactivation(cb,0,6,9,9);//inverser activation
-				if(endPlace==1){
-					((CaseButton)evt.getSource()).setVisible(false);
-				}
-				endPlace++;
-			}
-			System.out.println("tout les pions NE sont PAS posés");
-			
-		}
-		
+		//Phase 2': Après chaque action, chgt de tour/joueur
 		private void tourEndActionPerformed(ActionEvent evt) {
 			//changer plateau pions blancs/noirs
 			
 		}
 
-
+		//Déplacement des pions
 		private void buttonMousePressed(MouseEvent evt) {
 			try{
 				//CLIC DROIT
@@ -317,24 +372,35 @@ public class PlateauGUI extends JFrame
 					if(endPlace>2)deplacement=((CaseButton)evt.getSource()).deplacementAutorise(attaque, l, c, lNew, cNew);
 					//Vérifie que le déplacement est permis
 					if(deplacement){
-						boolean gagne=((CaseButton)evt.getSource()).combatGagne(attaque, defense);
+						int gagne=((CaseButton)evt.getSource()).combatGagne(attaque, defense);
+						System.out.println(gagne);
 						//Regarde lequel des pions gagne l'affrontement
-						if(gagne){
+						if(gagne==0);//Match impossible
+						//Match gagné
+						else if(gagne==3){
 							((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
 							((CaseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
 							pionCurrent=null;
 							//Remettre le bon fond là où on a pris la pièce qu'on dépose ailleurs
 							((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, l, c, background, listePionsBackground, neutre);
 						}
-						else{
+						//Match perdu
+						else if(gagne==-1){
 							pionCurrent=null;
 							//Remettre le bon fond là où on a pris la pièce qu'on dépose ailleurs
 							((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, l, c, background, listePionsBackground, neutre);
 						}
+						//Match nul
+						else{
+							pionCurrent=null;
+							((CaseButton)evt.getSource()).setPion(neutre);
+							((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, l, c, background, listePionsBackground, neutre);
+						}
+						
 					}
 				}
 				//CLIC GAUCHE
-
+				//if(((CaseButton)evt.getSource()).isNotVide())System.out.println(((CaseButton)evt.getSource()).getPion().getDescription());
 				else if(((CaseButton)evt.getSource()).isNotVide() && ((CaseButton)evt.getSource()).getPion().getValue()>-1 ){//éviter pions interdits
 					pionCurrent=((CaseButton)evt.getSource());//prend le bouton sélectionné en mémoire
 					l=((CaseButton)evt.getSource()).getI();

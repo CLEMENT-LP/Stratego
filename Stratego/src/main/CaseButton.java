@@ -63,9 +63,17 @@ public class CaseButton extends JButton
 		setPion(pion);
 	}
 	*/
-	public boolean combatGagne(Pion attaque, Pion defense){
-		if(attaque.getValue()>defense.getValue())return true;
-		else return false;
+	/**
+	 * 
+	 * @param attaque
+	 * @param defense
+	 * @return 3 si combat gagné/0 si combat impossible/1 match nul/-1 combat perdu
+	 */
+	public int combatGagne(Pion attaque, Pion defense){
+		if(attaque.getId()==defense.getId()) return 0;
+		else if(attaque.getValue()>defense.getValue())return 3;
+		else if(attaque.getValue()==defense.getValue())return 1;
+		else return -1;
 	}
 	public boolean deplacementAutorise(Pion attaque, int x0, int y0, int x, int y ){
 		if(attaque.getImagePath()=="bomb")return false;
