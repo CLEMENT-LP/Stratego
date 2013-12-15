@@ -86,6 +86,7 @@ public class CaseButton extends JButton
 			cb [l][c].setPion(neutre);
 		}
 	}
+	
 
 	
 }
