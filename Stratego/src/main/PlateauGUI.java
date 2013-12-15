@@ -7,6 +7,8 @@ import javax.swing.border.LineBorder;
 
 
 
+
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class PlateauGUI extends JFrame
 
 	public PlateauGUI ()
 	{
+		
 		BDDPions bddPions=new BDDPions();//création BDD Pions
 		listePionsBackground=bddPions.getListePionsBackground();
 		listePionsBlack=bddPions.getListePionsBlack();
@@ -43,13 +46,14 @@ public class PlateauGUI extends JFrame
 		this.setTitle("Stratego");//titre fenêtre
 		Box hbAll=Box.createHorizontalBox();//SCHEMA A FOURNIR (modulable pour ajout ultérieurs)
 		Box vbPlateau=Box.createVerticalBox();
-		Box vb1 = Box.createVerticalBox(); // boite pour les boutons
+		Box vb1 = Box.createHorizontalBox(); // boite pour les boutons
 
 		JPanel jp = new JPanel (new GridLayout(size, size)); // panneau pour le dessin de la matrice 
 		JPanel jpP1 = new JPanel (new GridLayout(5, 8)); //pions P1
 		JPanel jpP2 = new JPanel (new GridLayout(5, 8));//pions P2
 
 		JButton launch = new JButton("START");
+		JButton placer = new JButton("Placer les pions");
 		//launch.addActionListener (new LaunchButtonListener()); // bouton "Launch" avec écouteur d'action
 		//Création des 3 tableaux de boutons
 		cb1 = new CaseButton [5][8]; 
@@ -120,11 +124,13 @@ public class PlateauGUI extends JFrame
 
 			}
 		}
+		
 
 		//ADD element to the box
-		//vb1.add (vb1.createVerticalGlue());//utile si il y a pls boutons
+		//vb1.add (vb1.createHorizontalGlue());//utile si il y a pls boutons
 		vb1.add (launch);        
-
+		vb1.add (placer);
+		
 		vbPlateau.add(jpP1);
 		vbPlateau.add(vb1);
 		vbPlateau.add(jpP2);
@@ -137,6 +143,7 @@ public class PlateauGUI extends JFrame
 		this.pack();
 		this.setVisible(true); // on rend visible la fenetre
 		this.setLocationRelativeTo(null);//centrer la fenêtre
+			
 	}
 
 	private void buttonMousePressed(MouseEvent evt) {
@@ -144,9 +151,8 @@ public class PlateauGUI extends JFrame
 		//CLIC DROIT
 
 		int lNew=((CaseButton)evt.getSource()).getI();
-		int cNew=((CaseButton)evt.getSource()).getI();
-		//gagne=((CaseButton)evt.getSource()).isNotVide();
-		//System.out.println(((CaseButton)evt.getSource()).getPion().getDescription());
+		int cNew=((CaseButton)evt.getSource()).getJ();
+		
 		if(evt.getButton()==MouseEvent.BUTTON3 && pionCurrent.getPion()==null){
 			System.out.println("Sélectionnez d'abord un pion à déplacer");
 		}
@@ -154,8 +160,7 @@ public class PlateauGUI extends JFrame
 			Pion attaque=pionCurrent.getPion();
 			Pion defense=(((CaseButton)evt.getSource())).getPion();
 
-			boolean deplacement=true;
-			//boolean deplacement=((CaseButton)evt.getSource()).deplacementAutorise(attaque, l, c, lNew, cNew);
+			boolean deplacement=((CaseButton)evt.getSource()).deplacementAutorise(attaque, l, c, lNew, cNew);
 
 			if(deplacement){
 
