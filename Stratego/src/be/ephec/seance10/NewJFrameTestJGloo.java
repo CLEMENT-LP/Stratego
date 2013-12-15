@@ -63,7 +63,7 @@ public class NewJFrameTestJGloo extends javax.swing.JFrame {
 				{
 					jButton1 = new JButton();
 					jPanel1.add(jButton1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-					jButton1.setIcon(new ImageIcon(getClass().getClassLoader().getResource("Image/StrategoBackground_1.gif")));
+					//jButton1.setIcon(new ImageIcon(getClass().getClassLoader().getResource("Image/StrategoBackground_1.gif")));
 					jButton1.setBorder(BorderFactory.createCompoundBorder(
 							null, 
 							null));
@@ -71,7 +71,7 @@ public class NewJFrameTestJGloo extends javax.swing.JFrame {
 				{
 					jButton2 = new JButton();
 					jPanel1.add(jButton2, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-					jButton2.setIcon(new ImageIcon(getClass().getClassLoader().getResource("Image/StrategoBackground_2.gif")));
+					//jButton2.setIcon(new ImageIcon(getClass().getClassLoader().getResource("Image/StrategoBackground_2.gif")));
 					jButton2.setBorder(BorderFactory.createCompoundBorder(
 							null, 
 							null));

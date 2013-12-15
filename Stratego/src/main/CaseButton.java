@@ -1,5 +1,8 @@
 package main;
 
+import java.awt.Color;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class CaseButton extends JButton
@@ -68,6 +71,20 @@ public class CaseButton extends JButton
 		if(attaque.getImagePath()=="bomb")return false;
 		else if((y==y0 && Math.abs(x0-x)<2) || (x0==x && Math.abs(y0-y)<2)) return true;
 		else return false;
+	}
+	public void background(CaseButton[][] cb, CaseButton[][] cb1, CaseButton[][] cb2, int l, int c, Color background, Pion[][] listePionsBackground, Pion neutre ){
+		if(background==Color.RED){
+			cb1 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
+			cb1[l][c].setPion(null);
+		}
+		else if(background==Color.BLUE){
+			cb2 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
+			cb2 [l][c].setPion(null);
+		}
+		else{
+			cb [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource(listePionsBackground[l][c].getImagePath())));
+			cb [l][c].setPion(neutre);
+		}
 	}
 
 	

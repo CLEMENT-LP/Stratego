@@ -9,6 +9,8 @@ import javax.swing.border.LineBorder;
 
 
 
+
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -37,7 +39,10 @@ public class PlateauGUI extends JFrame
 
 	public PlateauGUI ()
 	{
-		
+		initGUI();
+	}
+	private void initGUI(){
+
 		BDDPions bddPions=new BDDPions();//création BDD Pions
 		listePionsBackground=bddPions.getListePionsBackground();
 		listePionsBlack=bddPions.getListePionsBlack();
@@ -124,13 +129,28 @@ public class PlateauGUI extends JFrame
 
 			}
 		}
-		
+
+		/*
+		 * PHASES de JEU
+		 */
+		launch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				launchActionPerformed(evt);
+			}
+		});
+
+		placer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				placerActionPerformed(evt);
+			}
+		});
+
 
 		//ADD element to the box
 		//vb1.add (vb1.createHorizontalGlue());//utile si il y a pls boutons
 		vb1.add (launch);        
 		vb1.add (placer);
-		
+
 		vbPlateau.add(jpP1);
 		vbPlateau.add(vb1);
 		vbPlateau.add(jpP2);
@@ -143,87 +163,70 @@ public class PlateauGUI extends JFrame
 		this.pack();
 		this.setVisible(true); // on rend visible la fenetre
 		this.setLocationRelativeTo(null);//centrer la fenêtre
-			
+
+
+	}
+
+
+	private void launchActionPerformed(ActionEvent evt) {
+
+	}
+
+	private void placerActionPerformed(ActionEvent evt) {
+		
 	}
 
 	private void buttonMousePressed(MouseEvent evt) {
+		try{
+			//CLIC DROIT
 
-		//CLIC DROIT
+			int lNew=((CaseButton)evt.getSource()).getI();
+			int cNew=((CaseButton)evt.getSource()).getJ();
+			//Pas de pion à placer
+			if(evt.getButton()==MouseEvent.BUTTON3 && pionCurrent.getPion()==null){
+				System.out.println("Sélectionnez d'abord un pion à déplacer");
+			}
+			//Placer le pion en mémoire
+			else if(evt.getButton()==MouseEvent.BUTTON3 && pionCurrent.getPion()!=null){
+				Pion attaque=pionCurrent.getPion();
+				Pion defense=(((CaseButton)evt.getSource())).getPion();
 
-		int lNew=((CaseButton)evt.getSource()).getI();
-		int cNew=((CaseButton)evt.getSource()).getJ();
-		
-		if(evt.getButton()==MouseEvent.BUTTON3 && pionCurrent.getPion()==null){
-			System.out.println("Sélectionnez d'abord un pion à déplacer");
-		}
-		else if(evt.getButton()==MouseEvent.BUTTON3 && pionCurrent.getPion()!=null){
-			Pion attaque=pionCurrent.getPion();
-			Pion defense=(((CaseButton)evt.getSource())).getPion();
-
-			boolean deplacement=((CaseButton)evt.getSource()).deplacementAutorise(attaque, l, c, lNew, cNew);
-
-			if(deplacement){
-
-
-				boolean gagne=((CaseButton)evt.getSource()).combatGagne(attaque, defense);
-
-				if(gagne){
-					((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
-					((CaseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
-					pionCurrent=null;
-
-					//Remettre le bon fond là où on a pris la pièce qu'on dépose ailleurs
-					if(background==Color.RED){	
-						cb1 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
-						cb1 [l][c].setPion(null);
-					}
-					else if(background==Color.BLUE){
-						cb2 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
-						cb2 [l][c].setPion(null);
+				boolean deplacement=((CaseButton)evt.getSource()).deplacementAutorise(attaque, l, c, lNew, cNew);
+				//Vérifie que le déplacement est permis
+				if(deplacement){
+					boolean gagne=((CaseButton)evt.getSource()).combatGagne(attaque, defense);
+					//Regarde lequel des pions gagne l'affrontement
+					if(gagne){
+						((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
+						((CaseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
+						pionCurrent=null;
+						//Remettre le bon fond là où on a pris la pièce qu'on dépose ailleurs
+						((CaseButton)evt.getSource()).background(cb, cb1, cb2, l, c, background, listePionsBackground, neutre);
 					}
 					else{
-						cb [l][c].setPion(neutre);
-						cb [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource(listePionsBackground[l][c].getImagePath())));	
-					}
-
-				}
-				else{//REPETITION A CHANGER
-					pionCurrent=null;
-
-					//Remettre le bon fond là où on a pris la pièce qu'on dépose ailleurs
-					if(background==Color.RED){	
-						cb1 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
-						cb1 [l][c].setPion(null);
-					}
-					else if(background==Color.BLUE){
-						cb2 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
-						cb2 [l][c].setPion(null);
-					}
-					else{
-						cb [l][c].setPion(neutre);
-						cb [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource(listePionsBackground[l][c].getImagePath())));	
+						pionCurrent=null;
+						//Remettre le bon fond là où on a pris la pièce qu'on dépose ailleurs
+						((CaseButton)evt.getSource()).background(cb, cb1, cb2, l, c, background, listePionsBackground, neutre);
 					}
 				}
 			}
-		}
-		//CLIC GAUCHE
+			//CLIC GAUCHE
 
-		else if(((CaseButton)evt.getSource()).isNotVide()){
-			System.out.println(((CaseButton)evt.getSource()).getPion().getDescription());
-			pionCurrent=((CaseButton)evt.getSource());//prend le bouton sélectionné en mémoire
-			l=((CaseButton)evt.getSource()).getI();
-			c=((CaseButton)evt.getSource()).getJ();
-			background=((CaseButton)evt.getSource()).getBackground();//regarde d'où provient la pièce
-			//System.out.println(pionCurrent);
-			//((CaseButton)evt.getSource()).setBackground (Color.GREEN);
-			//((CaseButton)evt.getSource()).setEnabled(false);
-			//System.out.println(l+"  ;  "+c);
-		}
-		else if(((CaseButton)evt.getSource()).isNotVide()==false){
-			System.out.println("Pas de pion à sélectionner ici");
-			System.out.println(((CaseButton)evt.getSource()).getPion().getDescription());
+			else if(((CaseButton)evt.getSource()).isNotVide()){
+				pionCurrent=((CaseButton)evt.getSource());//prend le bouton sélectionné en mémoire
+				l=((CaseButton)evt.getSource()).getI();
+				c=((CaseButton)evt.getSource()).getJ();
+				background=((CaseButton)evt.getSource()).getBackground();//regarde d'où provient la pièce
+			}
+			else if(((CaseButton)evt.getSource()).isNotVide()==false){
+				System.out.println("Pas de pion à sélectionner ici");
+				System.out.println(((CaseButton)evt.getSource()).getPion().getDescription());
+			}
+
+		}catch(NullPointerException e){
+			System.out.println("Déplacement non autorisé");
 		}
 	}
-}   
+}
 
 
