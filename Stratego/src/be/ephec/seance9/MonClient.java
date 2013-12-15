@@ -46,7 +46,7 @@ public class MonClient extends Socket implements Runnable {
 			Thread t = new Thread(mc);
 			t.start();//exécute dans un proccesus en parallele
 			try {
-				Thread.sleep(100);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -77,11 +77,11 @@ public class MonClient extends Socket implements Runnable {
 
 	@Override
 	public void run() {
-		String s;
+		Livre s;
 		while(!this.isClosed()){ // lecture bloquante 
 
 			try {
-				s= (String)this.ois.readObject();
+				s= (Livre)this.ois.readObject();
 				System.out.println("J'ai reçu : "+s);
 
 			} catch (ClassNotFoundException e) {
