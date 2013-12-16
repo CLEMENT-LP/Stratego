@@ -76,7 +76,7 @@ public class CaseButton extends JButton
 		else return -1;
 	}
 	public boolean deplacementAutorise(Pion attaque, int x0, int y0, int x, int y ){
-		if(attaque.getImagePath()=="bomb")return false;
+		if(attaque.getDescription()=="bomb") return false;
 		else if((y==y0 && Math.abs(x0-x)<2) || (x0==x && Math.abs(y0-y)<2)) return true;
 		else return false;
 	}

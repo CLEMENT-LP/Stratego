@@ -29,6 +29,7 @@ public class PlateauGUI extends JFrame
 	private CaseButton [][] cb;
 	private CaseButton [][] cbTab1;
 	private CaseButton [][] cbTab2;
+	private CaseButton [][] cbTabCombat;
 	private CaseButton pionCurrent;
 	private ArrayList<Pion> listePionsWhite=new ArrayList<Pion>();
 	private ArrayList<Pion> listePionsBlack=new ArrayList<Pion>();
@@ -68,7 +69,27 @@ public class PlateauGUI extends JFrame
 			g.drawString("FIN DU JEU", 75, 100);
 		}
 	}*/
+	private void combatGUI(Pion attaque, Pion defense){
+		System.out.println("COMBAT");
+		this.setTitle("Combat");
+		Box hb=Box.createHorizontalBox();
+		JPanel jp = new JPanel (new GridLayout(1, 2));
+		cbTabCombat [0][1] = new CaseButton(0,1,attaque);
+		cbTabCombat [0][2] = new CaseButton(0,2,defense);
+		jp.add(cbTabCombat[0][1]);
+		jp.add(cbTabCombat[0][2]);
 
+		hb.add(jp);
+		getContentPane().add (hb); // on ajoute le tout au contenu et on positionne 
+		this.setResizable(false);//désactive redimensionnement
+		//OBLIGATOIRE
+		this.pack();
+		this.setVisible(true); // on rend visible la fenetre
+		this.setLocationRelativeTo(null);//centrer la fenêtre
+		addWindowListener(new Fermeture());//couper le programme lorsqu'on quitte la fenêtre
+
+
+	}
 	private void initGUI(){
 
 		BDDPions bddPions=new BDDPions();//création BDD Pions
@@ -191,7 +212,7 @@ public class PlateauGUI extends JFrame
 				tourStartActionPerformed(evt);
 			}
 		});
-		
+
 		tourEnd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				tourEndActionPerformed(evt);
@@ -379,26 +400,26 @@ public class PlateauGUI extends JFrame
 			desactivation(cb, 6, 4, 7, 5);
 			cacherImagesPions(1);
 			cacherImagesPions(2);
-			
-			
+
+
 		}
 	}
-	
+
 	private void tourStartActionPerformed(ActionEvent evt) {
 		//remettre ses icones visibles
 		montrerImagesPions(idCurrent);
 		//System.out.println(idCurrent);
-			
+
 
 	}
-	
+
 	//Phase 2': Après chaque action, chgt de tour/joueur
 	private void tourEndActionPerformed(ActionEvent evt) {
 		//mettre ses icones invisibles avant le jeu de l'adversaire
 		cacherImagesPions(idCurrent);
 		if(idCurrent==2)idCurrent=1;
 		else idCurrent=2;
-		
+
 	}
 
 	//Déplacement des pions
@@ -421,6 +442,7 @@ public class PlateauGUI extends JFrame
 				if(endPlace>1)deplacement=((CaseButton)evt.getSource()).deplacementAutorise(attaque, l, c, lNew, cNew);
 				//Vérifie que le déplacement est permis
 				if(deplacement){
+		
 					int gagne=((CaseButton)evt.getSource()).combatGagne(attaque, defense);
 					System.out.println(gagne);
 					//Regarde lequel des pions gagne l'affrontement
@@ -441,6 +463,7 @@ public class PlateauGUI extends JFrame
 					}
 					//Match nul
 					else{
+						//combatGUI(attaque, defense);
 						pionCurrent=null;
 						((CaseButton)evt.getSource()).setPion(neutre);
 						((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, l, c, background, listePionsBackground, neutre);
