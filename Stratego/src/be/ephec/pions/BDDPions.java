@@ -48,8 +48,8 @@ public class BDDPions {
 				listePionsBackground[i][j]=new Pion("neutre",-1,"images/background/01 ("+(j+i*10+1)+").gif",0);
 			}
 		}
-		
-		
+
+
 		Pion bmarechal=new Pion("marshal",10,"images/black/marshal.jpg",1);
 		Pion bgeneral=new Pion("general",9,"images/black/general.jpg",1);
 		Pion bcolonel=new Pion("Colonel",8,"images/black/colonel.jpg",1);

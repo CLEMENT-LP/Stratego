@@ -15,7 +15,7 @@ import javax.swing.JButton;
  */
 public class CaseButton extends JButton
 {
-	
+
 	private int i; //ligne du bouton
 	private int j; //colonne du bouton
 	private Pion pion;
@@ -84,7 +84,7 @@ public class CaseButton extends JButton
 	 */
 	public String toString(){
 		return pion.getDescription();
-		
+
 	}
 	/**
 	 * Vérification si un bouton ne contient pas de pion : Pion
@@ -152,7 +152,7 @@ public class CaseButton extends JButton
 			cb [l][c].setPion(neutre);
 		}
 	}
-	
 
-	
+
+
 }
