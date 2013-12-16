@@ -43,7 +43,7 @@ public class PlateauGUI extends JFrame
 	private int endPlace=-1;//1e phase
 	private String[][] cacheImagesPions=new String[10][10];
 	private boolean iconesNotVisible=false;
-	private int idCurrent=1;
+	private int idCurrent=2;
 
 	public PlateauGUI ()
 	{
@@ -331,11 +331,11 @@ public class PlateauGUI extends JFrame
 	 * Remettre les icones lorsque l'adversaire a fini de jouer
 	 * @param cbTab
 	 */
-	public void montrerImagesPions(){
+	public void montrerImagesPions(int id){
 
 		for(int i=0;i<cb.length;i++){
 			for(int j=0;j<cb[i].length;j++){
-				cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(cacheImagesPions[i][j])));
+				if(cb[i][j].getPion().getId()==id)cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(cacheImagesPions[i][j])));
 			}
 		}
 
@@ -377,16 +377,18 @@ public class PlateauGUI extends JFrame
 			visible(cb);
 			desactivation(cb, 2, 4, 3, 5);
 			desactivation(cb, 6, 4, 7, 5);
+			cacherImagesPions(1);
+			cacherImagesPions(2);
+			
+			
 		}
 	}
 	
 	private void tourStartActionPerformed(ActionEvent evt) {
 		//remettre ses icones visibles
-		if(iconesNotVisible){
-			montrerImagesPions();
-			idCurrent--;
-		}
-		
+		montrerImagesPions(idCurrent);
+		//System.out.println(idCurrent);
+			
 
 	}
 	
@@ -394,7 +396,9 @@ public class PlateauGUI extends JFrame
 	private void tourEndActionPerformed(ActionEvent evt) {
 		//mettre ses icones invisibles avant le jeu de l'adversaire
 		cacherImagesPions(idCurrent);
-		idCurrent++;
+		if(idCurrent==2)idCurrent=1;
+		else idCurrent=2;
+		
 	}
 
 	//Déplacement des pions
