@@ -6,8 +6,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 /**
  * Classe CaseButton permet de gérer les boutons qui sont la base des interactions
- * du programme. On gère via ces boutons les déplacements de pièces (en réalité des boutons), 
- * les combats et les changements des images de fonds qui doivent accompagner le déplacement des boutons
+ * du programme. On gère les déplacements de pièces sur ces boutons, 
+ * les combats et les changements des images de fonds qui doivent accompagner le déplacement des pièces
  * 
  * @author CLEMENT Louis-Philippe
  * @author OBIANG NDAM Steeves
@@ -23,9 +23,8 @@ public class CaseButton extends JButton
 	 * Construit un bouton avec son emplacement de coordonnées(i,j) dans un repère orthogonal
 	 * et un pion
 	 * 
-	 * @param i>0 : entier qui donne la position du bouton selon un axe d'un repère othogonal (x,y)
-	 * @param j>0 : entier qui donne la position du bouton selon un axe d'un repère othogonal (x,y)
-	 * (différent de celui donné par i)
+	 * @param i>0 : entier qui donne la position du bouton selon la coordonnée y  d'un repère othogonal de type (x,y)
+	 * @param j>0 : entier qui donne la position du bouton selon la coordonnée x  d'un repère othogonal de type (x,y)
 	 * @param pion : un Pion 
 	 */
 	public CaseButton (int i,int j, Pion pion) 
@@ -37,7 +36,7 @@ public class CaseButton extends JButton
 	}
 	/**
 	 * 
-	 * @return
+	 * @return i>=0 : entier qui donne la position du bouton selon la coordonnée y  d'un repère othogonal de type (x,y)
 	 */
 	public int getI()
 	{
@@ -45,7 +44,7 @@ public class CaseButton extends JButton
 	}
 	/**
 	 * 
-	 * @return
+	 * @return j>=0 : entier qui donne la position du bouton selon la coordonnée x  d'un repère othogonal de type (x,y)
 	 */
 	public int getJ()
 	{
@@ -53,21 +52,21 @@ public class CaseButton extends JButton
 	}
 	/**
 	 * 
-	 * @param i
+	 * @param i>=0 : entier qui donne la position du bouton selon la coordonnée y  d'un repère othogonal de type (x,y)
 	 */
 	public void setI(int i) {
 		this.i = i;
 	}
 	/**
 	 * 
-	 * @param j
+	 * @param j>=0 : entier qui donne la position du bouton selon la coordonnée x  d'un repère othogonal de type (x,y)
 	 */
 	public void setJ(int j) {
 		this.j = j;
 	}
 	/**
 	 * 
-	 * @return
+	 * @return un pion : Pion
 	 */
 	public Pion getPion()
 	{
@@ -75,31 +74,33 @@ public class CaseButton extends JButton
 	}
 	/**
 	 * 
-	 * @param pion
+	 * @param pion : Pion
 	 */
 	public void setPion(Pion pion) {
 		this.pion = pion;
 	}
 	/**
-	 * 
+	 * @return la description du pion du bouton : chaine de caractères
 	 */
 	public String toString(){
 		return pion.getDescription();
 		
 	}
 	/**
-	 * Vérification contient Pion
-	 * @return true si la case contient pas de pion sinon retourne false
+	 * Vérification si un bouton ne contient pas de pion : Pion
+	 * 
+	 * @return true si le bouton contient un pion, false sinon
 	 */
 	public boolean isNotVide(){
 		if (this.getPion()==null) return false;
 		else return true;
 	}
 	/**
+	 * Résultat d'un combat entre deux pions
 	 * 
-	 * @param attaque
-	 * @param defense
-	 * @return 5 si la partie est gagnée/ 3 si combat gagné/0 si combat impossible/1 match nul/-1 combat perdu
+	 * @param attaque!=null : Pion
+	 * @param defense!=null : Pion
+	 * @return un entier :  5 si la partie est gagnée/ 3 si combat gagné/0 si combat impossible/1 match nul/-1 combat perdu
 	 */
 	public int combatGagne(Pion attaque, Pion defense){
 		if(defense.getValue()==0)return 5;
@@ -111,13 +112,14 @@ public class CaseButton extends JButton
 		else return -1;
 	}
 	/**
+	 * Gère l'autorisation de déplacement d'un pion
 	 * 
-	 * @param attaque
-	 * @param x0
-	 * @param y0
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param attaque!=null : Pion
+	 * @param x0>=0 : entier qui donne la position du pion qui se déplace selon la coordonnée x  d'un repère othogonal de type (x,y) 
+	 * @param y0>=0 : entier qui donne la position du pion qui se déplace selon la coordonnée y  d'un repère othogonal de type (x,y) 
+	 * @param x>=0 : entier qui donne la position de l'endroit où veut aller le pion selon la coordonnée x  d'un repère othogonal de type (x,y)
+	 * @param y>=0 : entier qui donne la position de l'endroit où veut aller le pion selon la coordonnée y  d'un repère othogonal de type (x,y)
+	 * @return true si le déplacement a lieu en croix autour du pion avec une case de déplacement, false si ce n'est pas le cas où si le pion est une bombe
 	 */
 	public boolean deplacementAutorise(Pion attaque, int x0, int y0, int x, int y ){
 		if(attaque.getDescription()=="bomb") return false;
@@ -125,15 +127,16 @@ public class CaseButton extends JButton
 		else return false;
 	}
 	/**
+	 * Gère le background des différents tableaux
 	 * 
-	 * @param cb
-	 * @param cb1
-	 * @param cb2
-	 * @param l
-	 * @param c
-	 * @param background
-	 * @param listePionsBackground
-	 * @param neutre
+	 * @param cb!=null : tableau des boutons du plateau principal
+	 * @param cb1!=null : tableau des boutons du plateau contenant les pions du joueur1
+	 * @param cb2!=null : tableau des boutons du plateau contenant les pions du joueur2
+	 * @param l>=0 : position de l'élément , n° ligne du tableau
+	 * @param c>=0 : position de l'élément , n° colonne du tableau
+	 * @param background : couleur de fond du tableau
+	 * @param listePionsBackground!=null : tableau des "pions" constituant le fond du tableau de jeu
+	 * @param neutre!=null : pion neutre
 	 */
 	public void background(CaseButton[][] cb, CaseButton[][] cb1, CaseButton[][] cb2, int l, int c, Color background, Pion[][] listePionsBackground, Pion neutre ){
 		if(background==Color.RED){

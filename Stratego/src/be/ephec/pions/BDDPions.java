@@ -2,7 +2,7 @@ package be.ephec.pions;
 
 import java.util.ArrayList;
 /**
- * Classe BDDPions
+ * Classe BDDPions permet d'avoir une "base de donnée" avec tous les pions nécessaires au jeu
  * 
  * @author CLEMENT Louis-Philippe
  * @author OBIANG NDAM Steeves
@@ -14,20 +14,30 @@ public class BDDPions {
 	private ArrayList<Pion> listePionsBlack=new ArrayList<Pion>();
 	private Pion[][] listePionsBackground=new Pion[10][10];
 	/**
-	 * Crée une "base de donnée" sous forme de tableau et listes avec toutes les images nécessaires au jeu
+	 * Crée une "base de donnée" sous forme de tableau et listes avec toutes les pions nécessaires au jeu
 	 */
 	public BDDPions(){
 		createPion();
 	}
-	
+	/**
+	 * 
+	 * @return une ArrayList contenant tout les pions blancs
+	 */
 	public ArrayList<Pion> getListePionsWhite() {
 		return listePionsWhite;
 	}
-
+	/**
+	 * 
+	 * @return une ArrayList contenant tout les pions noirs
+	 */
 	public ArrayList<Pion> getListePionsBlack() {
 		return listePionsBlack;
 	}
-
+	/**
+	 * 
+	 * @return un tableau contenant tout les "pions" qui seront le fond du plateau de jeu
+	 * On définit ces pions comme étant "neutres" (on ne doit pas voir d'interaction avec les pions "réels")
+	 */
 	public Pion[][] getListePionsBackground() {
 		return listePionsBackground;
 	}

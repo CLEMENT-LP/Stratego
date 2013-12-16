@@ -412,7 +412,7 @@ public class Plateau extends JFrame
 				}
 			}
 			
-			ArrayList<Pion> NewlistePionsBlack=listePionsWhite;
+			ArrayList<Pion> NewlistePionsBlack=listePionsBlack;
 			Collections.shuffle(NewlistePionsBlack);
 			compteur=0;
 			for(int i=6;i<10;i++){

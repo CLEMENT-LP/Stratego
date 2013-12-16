@@ -9,14 +9,25 @@ package be.ephec.jeu;
  */
 public class Joueur {
 	private String name;
-	
+	/**
+	 * Crée un joueur définit par son nom
+	 * @param name!=null : chaine de caractères
+	 */
 	public Joueur(String name) {
 		super();
 		this.name = name;
 	}
+	/**
+	 * 
+	 * @return name : chaine de caractères
+	 */
 	public String getName() {
 		return name;
 	}
+	/**
+	 * 
+	 * @param name!=null : chaine de caractères
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
