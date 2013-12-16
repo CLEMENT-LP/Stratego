@@ -102,9 +102,10 @@ public class CaseButton extends JButton
 	 * @param defense!=null : Pion
 	 * @return un entier :  5 si la partie est gagnée/ 3 si combat gagné/0 si combat impossible/1 match nul/-1 combat perdu
 	 */
-	public int combatGagne(Pion attaque, Pion defense){
-		if(defense.getValue()==0)return 5;
-		else if(attaque.getId()==defense.getId()) return 0;
+	public static int combatGagne(Pion attaque, Pion defense){
+		
+		if(attaque.getId()==defense.getId()) return 1;
+		else if(defense.getValue()==0)return 5;
 		else if(attaque.getValue()==1 && defense.getValue()==10) return 3;//combat espion-marechal
 		else if(attaque.getValue()==3 && defense.getValue()==11) return 3;//déminage
 		else if(attaque.getValue()>defense.getValue())return 3;

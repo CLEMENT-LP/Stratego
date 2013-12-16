@@ -375,7 +375,7 @@ public class Plateau extends JFrame
 					int gagne=((CaseButton)evt.getSource()).combatGagne(attaque, defense);
 					System.out.println(gagne);
 					//Regarde lequel des pions gagne l'affrontement
-					if(gagne==0);//Match impossible
+					if(gagne==1);//Match impossible
 					//Match gagné
 					else if(gagne==3){
 						((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
