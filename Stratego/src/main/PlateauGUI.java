@@ -219,7 +219,7 @@ public class PlateauGUI extends JFrame
 		/**
 		 * faire disparaitre boutons
 		 */
-		public void NotVisible(CaseButton[][] cb){
+		public void notVisible(CaseButton[][] cb){
 			for(int i=0;i<cb.length;i++){
 				for(int j=0;j<cb[i].length;j++){
 					cb[i][j].setVisible(false);
@@ -229,7 +229,7 @@ public class PlateauGUI extends JFrame
 		/**
 		 * faire réapparaitre boutons
 		 */
-		public void Visible(CaseButton[][] cb){
+		public void visible(CaseButton[][] cb){
 			for(int i=0;i<cb.length;i++){
 				for(int j=0;j<cb[i].length;j++){
 					cb[i][j].setVisible(true);
@@ -237,14 +237,14 @@ public class PlateauGUI extends JFrame
 			}
 		}
 		
-		public void NotVisible(CaseButton[][] cb, int l0, int c0, int l, int c){
+		public void notVisible(CaseButton[][] cb, int l0, int c0, int l, int c){
 			for(int i=c0;i<c+1;i++){
 				for(int j=l0;j<l+1;j++){
 					cb[i][j].setVisible(false);
 				}
 			}
 		}
-			public void Visible(CaseButton[][] cb, int l0, int c0, int l, int c){
+			public void visible(CaseButton[][] cb, int l0, int c0, int l, int c){
 				for(int i=c0;i<c+1;i++){
 					for(int j=l0;j<l+1;j++){
 						cb[i][j].setVisible(true);
@@ -316,35 +316,38 @@ public class PlateauGUI extends JFrame
 		private void placerActionPerformed(ActionEvent evt) {	
 			if(endPlace==-1){//éviter de relancer si le processus a déjà été mis en marche
 				activation(cb);
-				NotVisible(cb,0,0,9,5);
-				NotVisible(cbTab1);
+				notVisible(cb,0,0,9,5);
+				notVisible(cbTab1);
 				endPlace++;
 			}
 		}
 		//Phase 1': le joueur dit qu'il a posé ses pions
 		private void tourPlaceActionPerformed(ActionEvent evt) {
-			System.out.println(countPionOnTab(cb));
+			//System.out.println(countPionOnTab(cb));
 			
 			if(countPionOnTab(cb)==40 || endPlace==1 ){
 				
 				System.out.println("tout les pions sont posés");
 				
-				Visible(cbTab1);
-				Visible(cb);
-				NotVisible(cb,0,4,9,9);//inverser activation
+				visible(cbTab1);
+				visible(cb);
+				notVisible(cb,0,4,9,9);//inverser activation
 				System.out.println(endPlace);
 				//if(endPlace==1){
 					//((CaseButton)evt.getSource()).setVisible(false);
 				//}
 				endPlace++;
 			}
-			else System.out.println("tout les pions NE sont PAS posés");
+			//else System.out.println("tout les pions NE sont PAS posés");
 			
 		}
 		//Phase 2: lancement du jeu 1vs1
 		private void launchActionPerformed(ActionEvent evt) {
+			if(endPlace>1){
+			visible(cb);
 			desactivation(cb, 2, 4, 3, 5);
 			desactivation(cb, 6, 4, 7, 5);
+			}
 		}
 		//Phase 2': Après chaque action, chgt de tour/joueur
 		private void tourEndActionPerformed(ActionEvent evt) {
@@ -369,7 +372,7 @@ public class PlateauGUI extends JFrame
 					Pion defense=(((CaseButton)evt.getSource())).getPion();
 					//Vérifie que l'on a quitté la phase du positionnement des pions
 					boolean deplacement=true;
-					if(endPlace>2)deplacement=((CaseButton)evt.getSource()).deplacementAutorise(attaque, l, c, lNew, cNew);
+					if(endPlace>1)deplacement=((CaseButton)evt.getSource()).deplacementAutorise(attaque, l, c, lNew, cNew);
 					//Vérifie que le déplacement est permis
 					if(deplacement){
 						int gagne=((CaseButton)evt.getSource()).combatGagne(attaque, defense);
@@ -395,6 +398,7 @@ public class PlateauGUI extends JFrame
 							pionCurrent=null;
 							((CaseButton)evt.getSource()).setPion(neutre);
 							((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, l, c, background, listePionsBackground, neutre);
+							((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, lNew, cNew, background, listePionsBackground, neutre);
 						}
 						
 					}
