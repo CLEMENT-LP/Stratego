@@ -74,14 +74,17 @@ public class PlateauGUI extends JFrame
 		this.setTitle("Combat");
 		Box hb=Box.createHorizontalBox();
 		JPanel jp = new JPanel (new GridLayout(1, 2));
-		cbTabCombat [0][1] = new CaseButton(0,1,attaque);
-		cbTabCombat [0][2] = new CaseButton(0,2,defense);
-		jp.add(cbTabCombat[0][1]);
-		jp.add(cbTabCombat[0][2]);
+		cbTabCombat= new CaseButton[1][2];
+		cbTabCombat [0][0].setPreferredSize (new Dimension (50, 50)); 
+		cbTabCombat [0][1].setPreferredSize (new Dimension (50, 50)); 
+		//jp.add(cbTabCombat);
+		//jp.add (cbTabCombat[0][0]);
+		//jp.add (cbTabCombat[0][1]);
 
 		hb.add(jp);
 		getContentPane().add (hb); // on ajoute le tout au contenu et on positionne 
-		this.setResizable(false);//désactive redimensionnement
+		//this.setResizable(false);//désactive redimensionnement
+		
 		//OBLIGATOIRE
 		this.pack();
 		this.setVisible(true); // on rend visible la fenetre
@@ -106,11 +109,12 @@ public class PlateauGUI extends JFrame
 		JPanel jpP1 = new JPanel (new GridLayout(5, 8)); //pions P1
 		JPanel jpP2 = new JPanel (new GridLayout(5, 8));//pions P2
 
+		JButton placerAuto=new JButton("PLACE AUTO");
 		JButton placer = new JButton("1 PLACER");
 		JButton launch = new JButton("3 START");
-		JButton tourPlace = new JButton("2 FIN PLACEMENT");
-		JButton tourStart = new JButton("4 DEBUT DE TOUR");
-		JButton tourEnd = new JButton("5 FIN DE TOUR");
+		JButton endPlacer = new JButton("2 FIN PLACEMENT");
+		JButton tourStart = new JButton("4 DEBUT TOUR");
+		JButton tourEnd = new JButton("5 FIN TOUR");
 
 		//launch.addActionListener (new LaunchButtonListener()); // bouton "Launch" avec écouteur d'action
 		//Création des 3 tableaux de boutons
@@ -195,17 +199,24 @@ public class PlateauGUI extends JFrame
 			}
 		});
 
+		placerAuto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				placerAutoActionPerformed(evt);
+			}
+		});
+		
 		placer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				placerActionPerformed(evt);
 			}
 		});
 
-		tourPlace.addActionListener(new ActionListener() {
+		endPlacer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				tourPlaceActionPerformed(evt);
+				endPlacerActionPerformed(evt);
 			}
 		});
+		
 
 		tourStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -223,8 +234,9 @@ public class PlateauGUI extends JFrame
 		//ADD element to the box
 		//vb1.add (vb1.createHorizontalGlue());//utile si il y a pls boutons
 
+		vb1.add (placerAuto);
 		vb1.add (placer);
-		vb1.add (tourPlace);
+		vb1.add (endPlacer);
 		vb1.add (launch); 
 		vb1.add(tourStart);
 		vb1.add (tourEnd);
@@ -363,6 +375,46 @@ public class PlateauGUI extends JFrame
 	}
 
 
+	private void placerAutoActionPerformed(ActionEvent evt) {	
+		if(endPlace==-1){//éviter de relancer si le processus a déjà été mis en marche
+			activation(cb);
+			
+			//poser les pions
+			int compteur=0;
+			for(int i=0;i<4;i++){
+				for(int j=0;j<10;j++){
+					Pion pion=listePionsWhite.get(compteur);
+					cb [i][j].setPion(pion);
+					cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(pion.getImagePath())));
+					compteur++;
+				}
+			}/*
+			for(int i=4;i<6;i++){
+				for(int j=0;j<10;j++){
+					Pion pion=neutre;
+					cb [i][j].setPion(pion);
+					cb [i][j].getPion().setDescription("neutre");
+					cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(listePionsBackground[i][j].getImagePath())));
+					compteur++;
+				}
+			}*/
+			compteur=0;
+			for(int i=6;i<10;i++){
+				for(int j=0;j<10;j++){
+					Pion pion=listePionsBlack.get(compteur);
+					cb [i][j].setPion(pion);
+					cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(pion.getImagePath())));
+					compteur++;
+				}
+			}
+			notVisible(cbTab2);
+			notVisible(cbTab1);
+			desactivation(cb, 2, 4, 3, 5);
+			desactivation(cb, 6, 4, 7, 5);
+			endPlace=2;
+		}
+	}
+	
 	//Phase 1 : Placer les pions sur le plateau de jeu
 	private void placerActionPerformed(ActionEvent evt) {	
 		if(endPlace==-1){//éviter de relancer si le processus a déjà été mis en marche
@@ -373,7 +425,7 @@ public class PlateauGUI extends JFrame
 		}
 	}
 	//Phase 1': le joueur dit qu'il a posé ses pions
-	private void tourPlaceActionPerformed(ActionEvent evt) {
+	private void endPlacerActionPerformed(ActionEvent evt) {
 		//System.out.println(countPionOnTab(cb));
 
 		if(countPionOnTab(cb)==40 || endPlace==1 ){
@@ -426,7 +478,7 @@ public class PlateauGUI extends JFrame
 	private void buttonMousePressed(MouseEvent evt) {
 		try{
 			//CLIC DROIT
-
+			System.out.println(((CaseButton)evt.getSource()));
 			int lNew=((CaseButton)evt.getSource()).getI();
 			int cNew=((CaseButton)evt.getSource()).getJ();
 			//Pas de pion à placer
@@ -449,6 +501,8 @@ public class PlateauGUI extends JFrame
 					if(gagne==0);//Match impossible
 					//Match gagné
 					else if(gagne==3){
+						//if(endPlace>1 && defense.getDescription()!="neutre") combatGUI(attaque, defense);
+						if(endPlace>1 && defense.getDescription()!="neutre") combatGUI(pionCurrent.getPion(), neutre);
 						((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
 						((CaseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
 						pionCurrent=null;
@@ -463,7 +517,6 @@ public class PlateauGUI extends JFrame
 					}
 					//Match nul
 					else{
-						//combatGUI(attaque, defense);
 						pionCurrent=null;
 						((CaseButton)evt.getSource()).setPion(neutre);
 						((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, l, c, background, listePionsBackground, neutre);
@@ -487,6 +540,7 @@ public class PlateauGUI extends JFrame
 			}
 
 		}catch(NullPointerException e){
+			e.printStackTrace();
 			System.out.println("Déplacement non autorisé");
 		}
 	}

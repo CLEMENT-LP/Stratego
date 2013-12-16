@@ -71,6 +71,8 @@ public class CaseButton extends JButton
 	 */
 	public int combatGagne(Pion attaque, Pion defense){
 		if(attaque.getId()==defense.getId()) return 0;
+		else if(attaque.getValue()==1 && defense.getValue()==10) return 3;//combat espion-marechal
+		else if(attaque.getValue()==3 && defense.getValue()==11) return 3;//déminage
 		else if(attaque.getValue()>defense.getValue())return 3;
 		else if(attaque.getValue()==defense.getValue())return 1;
 		else return -1;
