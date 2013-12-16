@@ -12,6 +12,7 @@ import javax.swing.border.LineBorder;
 
 
 
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -80,7 +81,10 @@ public class PlateauGUI extends JFrame
 		//jp.add(cbTabCombat);
 		//jp.add (cbTabCombat[0][0]);
 		//jp.add (cbTabCombat[0][1]);
-
+		cbTabCombat [0][0] = new CaseButton(0,0,attaque);
+		cbTabCombat [0][1] = new CaseButton(0,1,attaque);
+		jp.add(cbTabCombat[0][0]);
+		jp.add(cbTabCombat[0][1]);
 		hb.add(jp);
 		getContentPane().add (hb); // on ajoute le tout au contenu et on positionne 
 		//this.setResizable(false);//désactive redimensionnement
@@ -260,7 +264,7 @@ public class PlateauGUI extends JFrame
 
 
 	/**
-	 * faire disparaitre boutons
+	 * faire disparaitre tableau
 	 */
 	public void notVisible(CaseButton[][] cb){
 		for(int i=0;i<cb.length;i++){
@@ -269,8 +273,10 @@ public class PlateauGUI extends JFrame
 			}
 		}
 	}
+	
+	
 	/**
-	 * faire réapparaitre boutons
+	 * faire réapparaitre un tableau
 	 */
 	public void visible(CaseButton[][] cb){
 		for(int i=0;i<cb.length;i++){
@@ -279,7 +285,14 @@ public class PlateauGUI extends JFrame
 			}
 		}
 	}
-
+	/**
+	 * faire disparaitre un tableau
+	 * @param cb
+	 * @param l0
+	 * @param c0
+	 * @param l
+	 * @param c
+	 */
 	public void notVisible(CaseButton[][] cb, int l0, int c0, int l, int c){
 		for(int i=c0;i<c+1;i++){
 			for(int j=l0;j<l+1;j++){
@@ -295,6 +308,7 @@ public class PlateauGUI extends JFrame
 		}
 
 	}
+	
 	/**
 	 * Indique interdit dans la description des pions contenus sur les cases interdites au placement
 	 * @param cb
@@ -373,12 +387,20 @@ public class PlateauGUI extends JFrame
 		}
 
 	}
+	/**
+	 * faire réapparaitre l'image d'un pion
+	 * @param l
+	 * @param c
+	 */
+	public void montrerImagePion(int l, int c){
+		cb [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource(cacheImagesPions[l][c])));
+	}
 
 
 	private void placerAutoActionPerformed(ActionEvent evt) {	
 		if(endPlace==-1){//éviter de relancer si le processus a déjà été mis en marche
 			activation(cb);
-			
+			//MELANGER LES LISTES??? swap
 			//poser les pions
 			int compteur=0;
 			for(int i=0;i<4;i++){
@@ -502,7 +524,14 @@ public class PlateauGUI extends JFrame
 					//Match gagné
 					else if(gagne==3){
 						//if(endPlace>1 && defense.getDescription()!="neutre") combatGUI(attaque, defense);
-						if(endPlace>1 && defense.getDescription()!="neutre") combatGUI(pionCurrent.getPion(), neutre);
+						
+						montrerImagePion(lNew, cNew);
+						/*try {
+							Thread.sleep(2000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}*/
 						((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
 						((CaseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
 						pionCurrent=null;
