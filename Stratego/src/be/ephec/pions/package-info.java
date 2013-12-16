@@ -5,4 +5,4 @@
  * @author Kraken
  *
  */
-package be.ephec.jeu;
+package be.ephec.pions;

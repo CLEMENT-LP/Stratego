@@ -1,5 +1,4 @@
-package main;
-
+package be.ephec.jeu;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -13,17 +12,27 @@ import javax.swing.border.LineBorder;
 
 
 
+
+
+
+
+import be.ephec.pions.BDDPions;
+import be.ephec.pions.CaseButton;
+import be.ephec.pions.Pion;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Collections;
 /**
  * Interface graphique du plateau, utilise classe Plateau pour définir le visuel
  * +comportement des différents éléments
  *     
- * @author lp
- *
+ * @author CLEMENT Louis-Philippe
+ * @author OBIANG NDAM Steeves
+ * @version 16/12/2013
  */
-public class PlateauGUI extends JFrame 
+public class Plateau extends JFrame 
 {
 	private final int size = 10;//taille côte tableau de jeu
 	//private JLabel result;
@@ -48,7 +57,7 @@ public class PlateauGUI extends JFrame
 	private int idCurrent=2;
 	private int nbDeplacement=0;//coumpteur: un seul déplacement permis par tour
 
-	public PlateauGUI ()
+	public Plateau ()
 	{
 		joueur1=new Joueur("joueur1");
 		joueur2=new Joueur("joueur2");
@@ -63,40 +72,29 @@ public class PlateauGUI extends JFrame
 			System.exit(0);
 		}
 	}
-	/*
 	private class Message extends Component
 	{
 		public void paint(Graphics g)
 		{
-			g.drawString("FIN DU JEU", 75, 100);
+			g.drawString("Fin du jeu, le joueur "+idCurrent+" a gagné!", 75, 100);
 		}
-	}*/
-	private void combatGUI(Pion attaque, Pion defense){
-		System.out.println("COMBAT");
-		this.setTitle("Combat");
-		Box hb=Box.createHorizontalBox();
-		JPanel jp = new JPanel (new GridLayout(1, 2));
-		cbTabCombat= new CaseButton[1][2];
-		cbTabCombat [0][0].setPreferredSize (new Dimension (50, 50)); 
-		cbTabCombat [0][1].setPreferredSize (new Dimension (50, 50)); 
-		//jp.add(cbTabCombat);
-		//jp.add (cbTabCombat[0][0]);
-		//jp.add (cbTabCombat[0][1]);
-		cbTabCombat [0][0] = new CaseButton(0,0,attaque);
-		cbTabCombat [0][1] = new CaseButton(0,1,attaque);
-		jp.add(cbTabCombat[0][0]);
-		jp.add(cbTabCombat[0][1]);
-		hb.add(jp);
-		getContentPane().add (hb); // on ajoute le tout au contenu et on positionne 
-		//this.setResizable(false);//désactive redimensionnement
+	}
+	private class CadreTexte extends Frame
+	{
 		
-		//OBLIGATOIRE
-		this.pack();
-		this.setVisible(true); // on rend visible la fenetre
-		this.setLocationRelativeTo(null);//centrer la fenêtre
-		addWindowListener(new Fermeture());//couper le programme lorsqu'on quitte la fenêtre
-
-
+		public CadreTexte()
+		{
+			setTitle("Résultat du combat");
+			setSize(300, 200);
+			setLocationRelativeTo(null);
+			addWindowListener(new Fermeture());
+			add(new Message());
+		}
+	}
+	
+	private void initCombat(){
+		Frame frame = new CadreTexte();
+		frame.show();
 	}
 	private void initGUI(){
 
@@ -106,6 +104,7 @@ public class PlateauGUI extends JFrame
 		listePionsWhite=bddPions.getListePionsWhite();
 
 		this.setTitle("Stratego");//titre fenêtre
+
 		Box hbAll=Box.createHorizontalBox();//SCHEMA A FOURNIR (modulable pour ajout ultérieurs)
 		Box vbPlateau=Box.createVerticalBox();
 		Box vb1 = Box.createHorizontalBox(); // boite pour les boutons
@@ -209,7 +208,7 @@ public class PlateauGUI extends JFrame
 				placerAutoActionPerformed(evt);
 			}
 		});
-		
+
 		placer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				placerActionPerformed(evt);
@@ -221,7 +220,7 @@ public class PlateauGUI extends JFrame
 				endPlacerActionPerformed(evt);
 			}
 		});
-		
+
 
 		tourStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -252,7 +251,6 @@ public class PlateauGUI extends JFrame
 		vbPlateau.add(jpP2);
 		hbAll.add(jp);
 		hbAll.add(vbPlateau);
-
 		getContentPane().add (hbAll); // on ajoute le tout au contenu et on positionne 
 		this.setResizable(false);//désactive redimensionnement
 		//OBLIGATOIRE
@@ -274,8 +272,8 @@ public class PlateauGUI extends JFrame
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * faire réapparaitre un tableau
 	 */
@@ -309,7 +307,7 @@ public class PlateauGUI extends JFrame
 		}
 
 	}
-	
+
 	/**
 	 * Indique interdit dans la description des pions contenus sur les cases interdites au placement
 	 * @param cb
@@ -401,30 +399,25 @@ public class PlateauGUI extends JFrame
 	private void placerAutoActionPerformed(ActionEvent evt) {	
 		if(endPlace==-1){//éviter de relancer si le processus a déjà été mis en marche
 			activation(cb);
-			//MELANGER LES LISTES??? swap
+			ArrayList<Pion> NewlistePionsWhite=listePionsWhite;
+			Collections.shuffle(NewlistePionsWhite);
 			//poser les pions
 			int compteur=0;
 			for(int i=0;i<4;i++){
 				for(int j=0;j<10;j++){
-					Pion pion=listePionsWhite.get(compteur);
+					Pion pion=NewlistePionsWhite.get(compteur);
 					cb [i][j].setPion(pion);
 					cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(pion.getImagePath())));
 					compteur++;
 				}
-			}/*
-			for(int i=4;i<6;i++){
-				for(int j=0;j<10;j++){
-					Pion pion=neutre;
-					cb [i][j].setPion(pion);
-					cb [i][j].getPion().setDescription("neutre");
-					cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(listePionsBackground[i][j].getImagePath())));
-					compteur++;
-				}
-			}*/
+			}
+			
+			ArrayList<Pion> NewlistePionsBlack=listePionsWhite;
+			Collections.shuffle(NewlistePionsBlack);
 			compteur=0;
 			for(int i=6;i<10;i++){
 				for(int j=0;j<10;j++){
-					Pion pion=listePionsBlack.get(compteur);
+					Pion pion=NewlistePionsBlack.get(compteur);
 					cb [i][j].setPion(pion);
 					cb [i][j].setIcon(new ImageIcon(getClass().getClassLoader().getResource(pion.getImagePath())));
 					compteur++;
@@ -437,7 +430,7 @@ public class PlateauGUI extends JFrame
 			endPlace=2;
 		}
 	}
-	
+
 	//Phase 1 : Placer les pions sur le plateau de jeu
 	private void placerActionPerformed(ActionEvent evt) {	
 		if(endPlace==-1){//éviter de relancer si le processus a déjà été mis en marche
@@ -526,7 +519,7 @@ public class PlateauGUI extends JFrame
 					//Match gagné
 					else if(gagne==3){
 						//if(endPlace>1 && defense.getDescription()!="neutre") combatGUI(attaque, defense);
-						
+
 						montrerImagePion(lNew, cNew);
 						/*try {
 							Thread.sleep(2000);
@@ -545,6 +538,9 @@ public class PlateauGUI extends JFrame
 						pionCurrent=null;
 						//Remettre le bon fond là où on a pris la pièce qu'on dépose ailleurs
 						((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, l, c, background, listePionsBackground, neutre);
+					}
+					else if (gagne==5){
+						initCombat();
 					}
 					//Match nul
 					else{

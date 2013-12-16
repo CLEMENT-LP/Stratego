@@ -1,18 +1,21 @@
-package main;
+package be.ephec.pions;
 
 import java.util.ArrayList;
 /**
- * Crée une bdd avec toutes les images nécessaires au jeu
+ * Classe BDDPions
  * 
- * @author Kraken
- *
+ * @author CLEMENT Louis-Philippe
+ * @author OBIANG NDAM Steeves
+ * @version 16/12/2013
  */
 public class BDDPions {
 
 	private ArrayList<Pion> listePionsWhite=new ArrayList<Pion>();
 	private ArrayList<Pion> listePionsBlack=new ArrayList<Pion>();
 	private Pion[][] listePionsBackground=new Pion[10][10];
-	
+	/**
+	 * Crée une "base de donnée" sous forme de tableau et listes avec toutes les images nécessaires au jeu
+	 */
 	public BDDPions(){
 		createPion();
 	}

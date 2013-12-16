@@ -1,16 +1,16 @@
-package main;
+package be.ephec.launcher;
 
-//import test.Plateau;
-
+import be.ephec.jeu.Plateau;
 /**
- * Launch the game
- * @author Steeves Obiang Ndam
- * @author Kraken
- *
+ * Classe Launcher permet de lancer le jeu
+ * 
+ * @author CLEMENT Louis-Philippe
+ * @author OBIANG NDAM Steeves
+ * @version 16/12/2013
  */
 public class Launcher {
 
 	public static void main(String[] args) {
-		PlateauGUI plateauGUI=new PlateauGUI();
+		Plateau plateau=new Plateau();
 	}
 }
