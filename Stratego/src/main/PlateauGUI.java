@@ -46,6 +46,7 @@ public class PlateauGUI extends JFrame
 	private String[][] cacheImagesPions=new String[10][10];
 	private boolean iconesNotVisible=false;
 	private int idCurrent=2;
+	private int nbDeplacement=0;//coumpteur: un seul déplacement permis par tour
 
 	public PlateauGUI ()
 	{
@@ -493,6 +494,7 @@ public class PlateauGUI extends JFrame
 		cacherImagesPions(idCurrent);
 		if(idCurrent==2)idCurrent=1;
 		else idCurrent=2;
+		nbDeplacement--;
 
 	}
 
@@ -515,8 +517,8 @@ public class PlateauGUI extends JFrame
 				boolean deplacement=true;
 				if(endPlace>1)deplacement=((CaseButton)evt.getSource()).deplacementAutorise(attaque, l, c, lNew, cNew);
 				//Vérifie que le déplacement est permis
-				if(deplacement){
-		
+				if(deplacement && nbDeplacement==0){
+					nbDeplacement++;
 					int gagne=((CaseButton)evt.getSource()).combatGagne(attaque, defense);
 					System.out.println(gagne);
 					//Regarde lequel des pions gagne l'affrontement
@@ -569,7 +571,6 @@ public class PlateauGUI extends JFrame
 			}
 
 		}catch(NullPointerException e){
-			e.printStackTrace();
 			System.out.println("Déplacement non autorisé");
 		}
 	}
