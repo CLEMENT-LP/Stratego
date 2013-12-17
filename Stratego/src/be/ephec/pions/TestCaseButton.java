@@ -43,7 +43,7 @@ public class TestCaseButton {
 	 */
 	@Test
 	public void testFratricide() {
-		assertEquals(bsergent.combatGagne(wsergent),1);
+		assertEquals(bsergent.combatGagne(bmarechal),0);
 	}
 	
 	/**

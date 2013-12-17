@@ -29,13 +29,13 @@ public class Pion {
 	}
 	/**
 	 * 
-	 * @return le grade du pion : chaine de caractères 
+	 * @return le nom/grade du pion : chaine de caractères 
 	 */
 	public String getDescription() {
 		return description;
 	}
 	/**
-	 * Change le nom/grade de l'unité
+	 * Change le nom/grade du pion
 	 * 
 	 * @param description!=null: chaine de caractère qui donne le grade du pion
 	 */
@@ -51,7 +51,7 @@ public class Pion {
 	}
 	/**
 	 * 
-	 * @return imagePath!=null : une chaine de caractère/chemin d'accès à l'image du pion
+	 * @return imagePath : une chaine de caractère/chemin d'accès à l'image du pion
 	 */
 	public String getImagePath() {
 		return imagePath;
@@ -64,9 +64,9 @@ public class Pion {
 		return id;
 	}
 	/**
-	 * Vérification si un bouton ne contient pas de pion : Pion
+	 * Vérification si un bouton ne contient pas de pion
 	 * 
-	 * @return true si le bouton contient un pion, false sinon
+	 * @return true si le bouton contient un pion : Pion, false sinon
 	 */
 	public boolean isNotVide(){
 		if (this==null) return false;
@@ -88,13 +88,13 @@ public class Pion {
 		else return -1;
 	}
 	/**
-	 * Gère l'autorisation de déplacement d'un pion
+	 * Gère l'autorisation de déplacement d'un pion 
 	 * 
 	 * @param x0>=0 : entier qui donne la position du pion qui se déplace selon la coordonnée x  d'un repère othogonal de type (x,y) 
 	 * @param y0>=0 : entier qui donne la position du pion qui se déplace selon la coordonnée y  d'un repère othogonal de type (x,y) 
 	 * @param x>=0 : entier qui donne la position de l'endroit où veut aller le pion selon la coordonnée x  d'un repère othogonal de type (x,y)
 	 * @param y>=0 : entier qui donne la position de l'endroit où veut aller le pion selon la coordonnée y  d'un repère othogonal de type (x,y)
-	 * @return true si le déplacement a lieu en croix autour du pion avec une case de déplacement, false si ce n'est pas le cas où si le pion est une bombe
+	 * @return true si le déplacement a lieu en croix autour du pion avec une case de déplacement, false si ce n'est pas le cas ou si le pion est une bombe ou si il veut faire du surplace 
 	 */
 	public boolean deplacementAutorise(int x0, int y0, int x, int y ){
 		if(this.getDescription()=="bomb") return false;

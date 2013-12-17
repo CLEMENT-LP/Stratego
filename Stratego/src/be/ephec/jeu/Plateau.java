@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 /**
  * Classe Plateau permet de créer l'interface graphique du jeu ainsi que les actions qui doivent être effectuées
- * en interaction avec celle-ci
+ * en interaction avec les éléments de celle-ci
  *     
  * @author CLEMENT Louis-Philippe
  * @author OBIANG NDAM Steeves
@@ -58,7 +58,7 @@ public class Plateau extends JFrame
 	private String[][] cacheImagesPions=new String[10][10];//cache temporaire permettant de repositionner les images des pions du joueur lorsque son tour vient
 	private int idCurrent=1;//vérification du joueur en train d'effectuer son tour
 	private int nbDeplacement=0;//compteur: un seul déplacement permis par tour
-	private boolean launch=false;
+	private boolean launch=false;//phase de jeu après placement
 	/**
 	 * Création du plateau de jeu
 	 */
@@ -300,7 +300,7 @@ public class Plateau extends JFrame
 			desactivation(cb, 2, 4, 3, 5);
 			desactivation(cb, 6, 4, 7, 5);
 			endPlace=2;
-			
+
 			visible(cb);
 			desactivation(cb, 2, 4, 3, 5);
 			desactivation(cb, 6, 4, 7, 5);
@@ -369,7 +369,6 @@ public class Plateau extends JFrame
 	//Déplacement des pions
 	private void buttonMousePressed(MouseEvent evt) {
 		try{
-			System.out.println(((CaseButton)evt.getSource()).getPion().getId());
 			//CLIC DROIT
 			int lNew=((CaseButton)evt.getSource()).getI();
 			int cNew=((CaseButton)evt.getSource()).getJ();
@@ -386,7 +385,7 @@ public class Plateau extends JFrame
 				if(endPlace>1)deplacement=attaque.deplacementAutorise( l, c, lNew, cNew);//WARNING POSSIBLE
 				//Vérifie que le déplacement est permis
 				if(deplacement && nbDeplacement==0 ){
-					
+
 					int gagne=attaque.combatGagne(defense);
 
 					//Regarde lequel des pions gagne l'affrontement
