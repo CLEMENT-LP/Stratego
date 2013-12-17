@@ -1,6 +1,6 @@
 package be.ephec.pions;
 /**
- * Classe Pion définit une pièce du jeu
+ * Classe Pion définit une pièce du jeu et gère ses déplacements ainsi que les combats entre pions
  * 
  * @author CLEMENT Louis-Philippe
  * @author OBIANG NDAM Steeves
@@ -63,7 +63,45 @@ public class Pion {
 	public int getId() {
 		return id;
 	}
-
+	/**
+	 * Vérification si un bouton ne contient pas de pion : Pion
+	 * 
+	 * @return true si le bouton contient un pion, false sinon
+	 */
+	public boolean isNotVide(){
+		if (this==null) return false;
+		else return true;
+	}
+	/**
+	 * Résultat d'un combat entre deux pions
+	 * 
+	 * @param defense!=null : Pion
+	 * @return un entier :  5 si la partie est gagnée/ 3 si combat gagné/0 si combat impossible/1 match nul/-1 combat perdu
+	 */
+	public int combatGagne(Pion defense){
+		if(this.getId()==defense.getId()) return 0;
+		else if(defense.getValue()==0)return 5;
+		else if(this.getValue()==1 && defense.getValue()==10) return 3;//combat espion-marechal
+		else if(this.getValue()==3 && defense.getValue()==11) return 3;//déminage
+		else if(this.getValue()>defense.getValue())return 3;
+		else if(this.getValue()==defense.getValue())return 1;
+		else return -1;
+	}
+	/**
+	 * Gère l'autorisation de déplacement d'un pion
+	 * 
+	 * @param x0>=0 : entier qui donne la position du pion qui se déplace selon la coordonnée x  d'un repère othogonal de type (x,y) 
+	 * @param y0>=0 : entier qui donne la position du pion qui se déplace selon la coordonnée y  d'un repère othogonal de type (x,y) 
+	 * @param x>=0 : entier qui donne la position de l'endroit où veut aller le pion selon la coordonnée x  d'un repère othogonal de type (x,y)
+	 * @param y>=0 : entier qui donne la position de l'endroit où veut aller le pion selon la coordonnée y  d'un repère othogonal de type (x,y)
+	 * @return true si le déplacement a lieu en croix autour du pion avec une case de déplacement, false si ce n'est pas le cas où si le pion est une bombe
+	 */
+	public boolean deplacementAutorise(int x0, int y0, int x, int y ){
+		if(this.getDescription()=="bomb") return false;
+		else if(y==y0 && x==x0) return false;
+		else if((y==y0 && Math.abs(x0-x)<2) || (x0==x && Math.abs(y0-y)<2)) return true;
+		else return false;
+	}
 
 
 

@@ -4,14 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 /**
- * Classe permettant de tester la méthode combatGagne() de la classe CaseButton
+ * Classe permettant de tester la méthode combatGagne() de la classe Pion
  * 
  * @author CLEMENT Louis-Philippe
  * @author OBIANG NDAM Steeves
  * @version 16/12/2013
  */
 public class TestCaseButton {
-
+	
 	Pion bmarechal=new Pion("marshal",10,"images/black/marshal.jpg",1);
 	Pion bgeneral=new Pion("general",9,"images/black/general.jpg",1);
 	Pion bcolonel=new Pion("Colonel",8,"images/black/colonel.jpg",1);
@@ -43,8 +43,7 @@ public class TestCaseButton {
 	 */
 	@Test
 	public void testFratricide() {
-		System.out.println(CaseButton.combatGagne(bsergent, wsergent));
-		assertEquals(CaseButton.combatGagne(bsergent, wsergent),1);
+		assertEquals(bsergent.combatGagne(wsergent),1);
 	}
 	
 	/**
@@ -52,7 +51,7 @@ public class TestCaseButton {
 	 */
 	@Test
 	public void testDrapeau() {
-		assertEquals(CaseButton.combatGagne(beclaireur, wdrapeau),5);
+		assertEquals(beclaireur.combatGagne( wdrapeau),5);
 	}
 	
 	/**
@@ -60,7 +59,7 @@ public class TestCaseButton {
 	 */
 	@Test
 	public void testEspion() {
-		assertEquals(CaseButton.combatGagne(bespion, wmarechal),3);
+		assertEquals(bespion.combatGagne(wmarechal),3);
 	}
 	
 	/**
@@ -68,7 +67,7 @@ public class TestCaseButton {
 	 */
 	@Test
 	public void testDeminage() {
-		assertEquals(CaseButton.combatGagne(bdemineur, wbombe),3);
+		assertEquals(bdemineur.combatGagne(wbombe),3);
 	}
 	
 	/**
@@ -76,7 +75,7 @@ public class TestCaseButton {
 	 */
 	@Test
 	public void testNormalWin() {
-		assertEquals(CaseButton.combatGagne(bgeneral, wcolonel),3);
+		assertEquals(bgeneral.combatGagne(wcolonel),3);
 	}
 	
 	/**
@@ -84,7 +83,7 @@ public class TestCaseButton {
 	 */
 	@Test
 	public void testEgalite() {
-		assertEquals(CaseButton.combatGagne(bmajor, wmajor),1);
+		assertEquals(bmajor.combatGagne(wmajor),1);
 	}
 	
 	/**
@@ -92,6 +91,6 @@ public class TestCaseButton {
 	 */
 	@Test
 	public void testPerdu() {
-		assertEquals(CaseButton.combatGagne(bcolonel,wgeneral),-1);
+		assertEquals(bcolonel.combatGagne(wgeneral),-1);
 	}
 }

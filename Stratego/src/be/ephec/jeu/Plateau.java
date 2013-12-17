@@ -16,6 +16,8 @@ import javax.swing.border.LineBorder;
 
 
 
+
+
 import be.ephec.pions.BDDPions;
 import be.ephec.pions.CaseButton;
 import be.ephec.pions.Pion;
@@ -33,9 +35,10 @@ import java.util.Collections;
  * @version 16/12/2013
  */
 //Note: oui ça ne servait à rien de documenter des méthodes private, mais c'est intéressant pour nous si on continue le développement par la suite.
+
 public class Plateau extends JFrame 
 {
-	private final int size = 10;//taille côte tableau de jeu
+	private final int size = 10;//taille côté tableau de jeu
 	//private JLabel result;
 	private CaseButton [][] cb;//plateau de jeu
 	private CaseButton [][] cbTab1;//plateau des pièces du joueur1
@@ -53,8 +56,9 @@ public class Plateau extends JFrame
 	private Joueur joueurCurrent;
 	private int endPlace=-1;// avancée des phases de jeu, sécurité ordre actions
 	private String[][] cacheImagesPions=new String[10][10];//cache temporaire permettant de repositionner les images des pions du joueur lorsque son tour vient
-	private int idCurrent=2;//vérification du joueur en train d'effectuer son tour
+	private int idCurrent=1;//vérification du joueur en train d'effectuer son tour
 	private int nbDeplacement=0;//compteur: un seul déplacement permis par tour
+	private boolean launch=false;
 	/**
 	 * Création du plateau de jeu
 	 */
@@ -192,10 +196,10 @@ public class Plateau extends JFrame
 			}
 
 		}
-		desactivation(cb);
+		desactivation(cb);//interdire les déplacements lors de l'apparition de l'interface du jeu
 
 		/*
-		 * PHASES de JEU boutons
+		 * Ajout de Listener sur les boutons régissant les différentes phases de jeu
 		 */
 		launch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -235,7 +239,7 @@ public class Plateau extends JFrame
 		});
 
 
-		//ADD element to the box
+		//ADD elements to the box
 
 		vb1.add (placerAuto);
 		vb1.add (placer);
@@ -296,12 +300,21 @@ public class Plateau extends JFrame
 			desactivation(cb, 2, 4, 3, 5);
 			desactivation(cb, 6, 4, 7, 5);
 			endPlace=2;
+			
+			visible(cb);
+			desactivation(cb, 2, 4, 3, 5);
+			desactivation(cb, 6, 4, 7, 5);
+			cacherImagesPions(1);
+			cacherImagesPions(2);
+			launch=true;
+			if(idCurrent!=1)idCurrent=1;
 		}
 	}
 
 	//Phase 1 option 2 : Placer les pions sur le plateau de jeu
 	private void placerActionPerformed(ActionEvent evt) {	
 		if(endPlace==-1){//éviter de relancer si le processus a déjà été mis en marche
+			background=Color.BLUE;
 			activation(cb);
 			notVisible(cb,0,0,9,5);
 			notVisible(cbTab1);
@@ -312,14 +325,14 @@ public class Plateau extends JFrame
 	private void endPlacerActionPerformed(ActionEvent evt) {
 
 		if(countPionOnTab(cb)==40 || endPlace==1 ){
-
+			background=Color.RED;
 			System.out.println("tout les pions sont posés");
 
 			visible(cbTab1);
 			visible(cb);
 			notVisible(cb,0,4,9,9);//inverser activation
-			System.out.println(endPlace);
 			endPlace++;
+			idCurrent++;
 		}
 
 	}
@@ -331,7 +344,8 @@ public class Plateau extends JFrame
 			desactivation(cb, 6, 4, 7, 5);
 			cacherImagesPions(1);
 			cacherImagesPions(2);
-
+			launch=true;
+			if(idCurrent!=1)idCurrent=1;
 
 		}
 	}
@@ -344,18 +358,19 @@ public class Plateau extends JFrame
 	//Phase 2': Après chaque action, chgt de tour/joueur
 	private void tourEndActionPerformed(ActionEvent evt) {
 		//mettre ses icones invisibles avant le jeu de l'adversaire
-		cacherImagesPions(idCurrent);
-		if(idCurrent==2)idCurrent=1;
-		else idCurrent=2;
-		nbDeplacement--;
-
+		if(nbDeplacement==1){
+			cacherImagesPions(idCurrent);
+			if(idCurrent==2)idCurrent=1;
+			else idCurrent=2;
+			if(launch)nbDeplacement--;
+		}
 	}
 
 	//Déplacement des pions
 	private void buttonMousePressed(MouseEvent evt) {
 		try{
+			System.out.println(((CaseButton)evt.getSource()).getPion().getId());
 			//CLIC DROIT
-			System.out.println(((CaseButton)evt.getSource()));
 			int lNew=((CaseButton)evt.getSource()).getI();
 			int cNew=((CaseButton)evt.getSource()).getJ();
 			//Pas de pion à placer
@@ -368,27 +383,31 @@ public class Plateau extends JFrame
 				Pion defense=(((CaseButton)evt.getSource())).getPion();
 				//Vérifie que l'on a quitté la phase du positionnement des pions
 				boolean deplacement=true;
-				if(endPlace>1)deplacement=((CaseButton)evt.getSource()).deplacementAutorise(attaque, l, c, lNew, cNew);
+				if(endPlace>1)deplacement=attaque.deplacementAutorise( l, c, lNew, cNew);//WARNING POSSIBLE
 				//Vérifie que le déplacement est permis
-				if(deplacement && nbDeplacement==0){
-					nbDeplacement++;
-					int gagne=((CaseButton)evt.getSource()).combatGagne(attaque, defense);
-					System.out.println(gagne);
+				if(deplacement && nbDeplacement==0 ){
+					
+					int gagne=attaque.combatGagne(defense);
+
 					//Regarde lequel des pions gagne l'affrontement
-					if(gagne==1);//Match impossible
+					if(gagne==0 && launch)nbDeplacement--;
+					else if(gagne==0);//Match impossible
 					//Match gagné
 					else if(gagne==3){
 						((CaseButton)evt.getSource()).setPion(pionCurrent.getPion());
 						((CaseButton)evt.getSource()).setIcon(new ImageIcon(getClass().getClassLoader().getResource(pionCurrent.getPion().getImagePath())));
 						pionCurrent=null;
+
 						//Remettre le bon fond là où on a pris la pièce qu'on dépose ailleurs
-						((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, l, c, background, listePionsBackground, neutre);
+						background(l,c);
+						//((CaseButton)evt.getSource()).background();
 					}
 					//Match perdu
 					else if(gagne==-1){
 						pionCurrent=null;
 						//Remettre le bon fond là où on a pris la pièce qu'on dépose ailleurs
-						((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, l, c, background, listePionsBackground, neutre);
+						background(l,c);
+						//((CaseButton)evt.getSource()).background(cb, l, c, background, listePionsBackground, neutre);
 					}
 					else if (gagne==5){
 						initCombat();
@@ -397,21 +416,22 @@ public class Plateau extends JFrame
 					else{
 						pionCurrent=null;
 						((CaseButton)evt.getSource()).setPion(neutre);
-						((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, l, c, background, listePionsBackground, neutre);
-						((CaseButton)evt.getSource()).background(cb, cbTab1, cbTab2, lNew, cNew, background, listePionsBackground, neutre);
+						background(l, c);
+						background(lNew, cNew);
 					}
-
+					if(launch)nbDeplacement++;
 				}
 			}
 			//CLIC GAUCHE
-			else if(((CaseButton)evt.getSource()).isNotVide() && ((CaseButton)evt.getSource()).getPion().getValue()>-1 ){//éviter pions interdits
+
+			else if(((CaseButton)evt.getSource()).getPion().isNotVide() && ((CaseButton)evt.getSource()).getPion().getValue()>-1 && ((CaseButton)evt.getSource()).getPion().getId()==idCurrent){//éviter pions interdits
 				pionCurrent=((CaseButton)evt.getSource());//prend le bouton sélectionné en mémoire
 				l=((CaseButton)evt.getSource()).getI();
 				c=((CaseButton)evt.getSource()).getJ();
 				background=((CaseButton)evt.getSource()).getBackground();//regarde d'où provient la pièce
-				System.out.println(pionCurrent);
+
 			}
-			else if(((CaseButton)evt.getSource()).isNotVide()==false){
+			else if(((CaseButton)evt.getSource()).getPion().isNotVide()==false){
 				System.out.println("Pas de pion à sélectionner ici");
 				System.out.println(((CaseButton)evt.getSource()).getPion().getDescription());
 			}
@@ -547,6 +567,28 @@ public class Plateau extends JFrame
 			}
 		}
 
+	}
+
+	/**
+	 * Gère le background d'un bouton
+	 * 
+	 * @param l>=0 : position du bouton , n° ligne du tableau
+	 * @param c>=0 : position du bouton , n° colonne du tableau
+	 * 
+	 */
+	private void background(int l,int c){
+		if(background==Color.RED){
+			cbTab1 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
+			cbTab1 [l][c].setPion(null);
+		}
+		else if(background==Color.BLUE){
+			cbTab2 [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource("")));
+			cbTab2 [l][c].setPion(null);
+		}
+		else{
+			cb [l][c].setIcon(new ImageIcon(getClass().getClassLoader().getResource(listePionsBackground[l][c].getImagePath())));
+			cb [l][c].setPion(neutre);
+		}
 	}
 }
 
